@@ -1,3 +1,37 @@
 // Place all the styles related to the tasks controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+#tasks {
+  .table {
+    tr.task {
+      height:37px;
+
+      .name {
+        outline:none;
+      }
+
+      .btn-group {
+        float: right; 
+      }
+
+      &:hover {
+        cursor: pointer;
+        .btn-group {
+          display:block;
+        }
+      }
+
+      &.new {
+        font-style: italic;
+        .btn-group {
+          display: none;
+        }
+      }
+
+      &.complete {
+        text-decoration: line-through;
+      }
+    }
+  }
+}
