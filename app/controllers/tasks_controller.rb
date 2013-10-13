@@ -2,7 +2,7 @@ class TasksController < ApplicationController
   respond_to :json
 
   def index
-    respond_with Task.all
+    respond_with Task.rank(:rank).all
   end
 
   def show
@@ -14,7 +14,9 @@ class TasksController < ApplicationController
   end
 
   def update
-    respond_with Task.update(params[:id], params["task"].permit(:name, :complete))
+    strong_params = params["task"].permit(:name, :complete)
+    respond_with Task.update(params[:id], strong_params)
+    Task.find(params[:id]).update(rank_position: params[:rank])
   end
 
   def destroy

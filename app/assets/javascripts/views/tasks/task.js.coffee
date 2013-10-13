@@ -1,14 +1,13 @@
 class Cleancheese.Views.Task extends Backbone.View
   template: JST['tasks/task']
-  tagName: 'tr'
   events:
-    "click td .destroy": "destroy_task"
-    "click td .complete": "complete_task"
-    "click td.name": "edit_task"
-    "blur td": "update_task"
+    "click .destroy": "destroy_task"
+    "click .complete": "complete_task"
+    "click .edit": "edit_task"
+    "blur .name": "update_task"
 
   render: ->
-    $(@el).html(@template(task: @model)).addClass('task')
+    $(@el).html(@template(task: @model))
     $(@el).addClass('complete') if @model.get('complete')
     this
 
@@ -36,7 +35,6 @@ class Cleancheese.Views.Task extends Backbone.View
     name_el = task_el.find('.name')
     name_el.prop('contentEditable', true).focus()
     range = document.createRange()
-    console.log name_el
     range.selectNodeContents(name_el[0])
     sel = window.getSelection()
     sel.removeAllRanges()

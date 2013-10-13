@@ -3,23 +3,29 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 #tasks {
-  .table {
-    tr.task {
-      height:37px;
+  margin-bottom: 40px;
+
+  h1 {margin-bottom:10px;}
+  .tasks {
+    padding-left: 2px;
+    .task {
+      border-top:1px solid #ccc;
+      padding:8px 0;
+      width:100%;
+      background: rgba(255,255,255,.65);
 
       .name {
         outline:none;
+        font-size: 18px;
+        line-height: 1.6em;
       }
 
       .btn-group {
-        float: right; 
+        float: right;
       }
 
       &:hover {
         cursor: pointer;
-        .btn-group {
-          display:block;
-        }
       }
 
       &.new {

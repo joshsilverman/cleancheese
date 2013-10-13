@@ -12,13 +12,15 @@ class Cleancheese.Views.TasksIndex extends Backbone.View
     $(@el).html(@template())
     @collection.each @append_task
     @append_task new Cleancheese.Models.Task
+    $(".tasks").sortable(items: '.task:not(.new)', beforeStop: @update_rank).disableSelection()
     this
 
   append_task: (task) ->
     view = new Cleancheese.Views.Task(model: task)
-    el = $(view.render().el)
+    el = $(view.render().el).addClass('task')
     el.addClass('new') if (task.get('id') == undefined)
-    $('.table.tasks').append el
+    $(el).data('id', task.get('id')) unless (task.get('id') == undefined)
+    $('.tasks').append el
 
   new_task: (event) ->
     task_el = $(event.currentTarget)
@@ -28,3 +30,11 @@ class Cleancheese.Views.TasksIndex extends Backbone.View
     name_el = $(event.target)
     name = name_el.html()
     @collection.create name: name
+
+  update_rank: (event, ui) =>
+    task_el = ui.item
+    task = @collection.where(id: $(task_el).data('id'))[0]
+    @collection.off('sync', @render, this)
+    task.once('sync', => @collection.fetch())
+    @collection.on('sync', => @collection.on('sync', @render, this))
+    task.update_rank(task_el.prevAll().length)
