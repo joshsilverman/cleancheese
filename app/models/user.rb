@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
 
   def send_reminder user
     top_ranked_task = Task.order(:rank).limit(1).first.name
-    msg = "Don't forget your goald for today: #{top_ranked_task}"
+    msg = "Don't forget your goal for today: #{top_ranked_task}"
     sms(user, msg)
   end
 
