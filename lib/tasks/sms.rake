@@ -1,4 +1,3 @@
-
 namespace :sms do
   task goal: :environment do
     coach = User.where(tel: '+12077473228', name: 'Coach').first_or_create

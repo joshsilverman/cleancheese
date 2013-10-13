@@ -1,8 +1,8 @@
 class User < ActiveRecord::Base
 
   def send_todays_goal user
-    top_ranked_task = Task.order(:rank).limit(1).first.name
-    msg = "Today's goal: #{top_ranked_task}"
+    top_ranked_task = Task.where('complete = ? OR complete IS NULL', false).order(:rank).limit(1).first
+    msg = "Today's goal: #{top_ranked_task.name}"
     sms(user, msg)
   end
 
@@ -13,10 +13,6 @@ class User < ActiveRecord::Base
   end
 
   def sms user, msg
-    puts '--- sms'
-    puts tel
-    puts user.tel
-    puts msg
     twilio.account.sms.messages.create(
       from: tel,
       to: user.tel,
