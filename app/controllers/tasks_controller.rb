@@ -15,8 +15,8 @@ class TasksController < ApplicationController
 
   def update
     strong_params = params["task"].permit(:name, :complete)
-    respond_with Task.update(params[:id], strong_params)
     Task.find(params[:id]).update(rank_position: params[:rank])
+    respond_with Task.update(params[:id], strong_params)
   end
 
   def destroy
