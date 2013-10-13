@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require jquery.ui.sortable
+//= require vendor/jquery.ui.punch
 //= require underscore
 //= require backbone
 //= require cleancheese

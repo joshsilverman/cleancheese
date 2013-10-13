@@ -4,3 +4,4 @@
   <a class="btn edit" href="#"><i class="icon-pencil"></i></a>
   <a class="btn destroy" href="#"><i class="icon-remove"></i></a>
 </span>
+<div style='clear:both'></div>
