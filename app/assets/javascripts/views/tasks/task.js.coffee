@@ -5,6 +5,7 @@ class Cleancheese.Views.Task extends Backbone.View
     "click .complete": "complete_task"
     "click .edit": "edit_task"
     "blur .name": "update_task"
+    "keypress .name": "override_enter"
 
   render: ->
     $(@el).html(@template(task: @model))
@@ -19,7 +20,7 @@ class Cleancheese.Views.Task extends Backbone.View
   update_task: (event) =>
     task_el = $(event.target).parents('.task')
     return if task_el.hasClass("new")
-    name = task_el.find('.name').html()
+    name = task_el.find('.name').html().replace(/&nbsp;/g,'')
     @model.set name: name
     @model.save()
 
@@ -39,3 +40,9 @@ class Cleancheese.Views.Task extends Backbone.View
     sel = window.getSelection()
     sel.removeAllRanges()
     sel.addRange(range)
+
+  override_enter: (event) ->
+    return unless event.keyCode == 13
+    event.preventDefault()
+    event.stopPropagation()
+    $(@el).find('.name').blur()
