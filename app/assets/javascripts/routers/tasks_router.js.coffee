@@ -8,8 +8,10 @@ class Cleancheese.Routers.Tasks extends Backbone.Router
     @collection.fetch()
 
   index: ->
-    view = new Cleancheese.Views.TasksIndex(collection: @collection)
-    $('#container').html(view.render().el)
+    tasks_view = new Cleancheese.Views.TasksIndex(collection: @collection)
+    progress_header_view = new Cleancheese.Views.ProgressHeader(collection: @collection)
+    $('#container').html(tasks_view.render().el)
+    $('#progress_header').html(progress_header_view.render().el)
 
   show: (id) ->
     alert "Task #{id}"
