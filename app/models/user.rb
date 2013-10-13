@@ -13,6 +13,10 @@ class User < ActiveRecord::Base
   end
 
   def sms user, msg
+    puts '--- sms'
+    puts tel
+    puts user.tel
+    puts msg
     twilio.account.sms.messages.create(
       from: tel,
       to: user.tel,
