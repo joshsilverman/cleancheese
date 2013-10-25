@@ -1,4 +1,4 @@
 <% for day in Object.keys(@progress_units): %>
   <!-- <%= day %> -->
-  <li><%= @progress_units[day] %></li>
+  <li class="<%= 'success' if @progress_units[day] %>"></li>
 <% end %>

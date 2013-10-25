@@ -2,6 +2,25 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+#progress_header{
+  text-align: center;
+  margin-top: 15px;
+  li {
+    list-style-image: none;
+    background:#555;
+    display: inline-block;
+    height: 10px;
+    width:10px;
+    border:1px solid #666;
+    border-radius:5px;
+
+    &.success {
+      border:1px solid #999;
+      background:green;
+    }
+  }
+}
+
 #tasks {
   h1 {margin-bottom:10px;}
   .tasks {
