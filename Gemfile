@@ -19,8 +19,13 @@ gem 'turbolinks'
 
 gem 'jbuilder', '~> 1.2'
 
-group :development do
+group :development, :test do
   gem 'pry'
+end
+
+group :test do
+  gem 'factory_girl'
+  gem "minitest", "~> 4.7"
 end
 
 # Use ActiveModel has_secure_password

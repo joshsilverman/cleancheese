@@ -15,6 +15,7 @@ Cleancheese::Application.configure do
   # Configure static asset server for tests with Cache-Control for performance.
   config.serve_static_assets  = true
   config.static_cache_control = "public, max-age=3600"
+  config.assets.enabled = true
 
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true

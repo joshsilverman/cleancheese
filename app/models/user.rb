@@ -31,11 +31,13 @@ class User < ActiveRecord::Base
 
   # base
   def sms user, msg
-    twilio.account.sms.messages.create(
-      from: tel,
-      to: user.tel,
-      body: msg
-    )
+    unless Rails.env.test?
+      twilio.account.sms.messages.create(
+        from: tel,
+        to: user.tel,
+        body: msg
+      )
+    end
   end
 
   private

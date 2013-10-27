@@ -1,15 +1,19 @@
 ENV["RAILS_ENV"] ||= "test"
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
+require "minitest/spec"
+require 'factory_girl'
+require 'active_support/testing/setup_and_teardown'
 
-class ActiveSupport::TestCase
+class MiniTest::Unit::TestCase
   ActiveRecord::Migration.check_pending!
+  extend MiniTest::Spec::DSL
 
-  # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
-  #
-  # Note: You'll currently still have to declare fixtures explicitly in integration tests
-  # -- they do not yet inherit this setting
-  fixtures :all
+  # integration tests should have access to get/post/put/etc. and routes
+  include Rails.application.routes.url_helpers
+  include ActiveSupport::Testing::SetupAndTeardown
+  include ActionController::TestCase::Behavior
 
-  # Add more helper methods to be used by all tests here...
+  include FactoryGirl::Syntax::Methods
+  FactoryGirl.find_definitions
 end
