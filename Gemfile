@@ -21,11 +21,14 @@ gem 'jbuilder', '~> 1.2'
 
 group :development, :test do
   gem 'pry'
+  gem 'guard-minitest'
 end
 
 group :test do
   gem 'factory_girl'
   gem "minitest", "~> 4.7"
+  gem "turn", "~> 0.9.6"
+  gem 'database_cleaner'
 end
 
 # Use ActiveModel has_secure_password

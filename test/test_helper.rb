@@ -4,8 +4,11 @@ require 'rails/test_help'
 require "minitest/spec"
 require 'factory_girl'
 require 'active_support/testing/setup_and_teardown'
+require 'database_cleaner'
 
-class MiniTest::Unit::TestCase
+DatabaseCleaner.strategy = :transaction
+
+class MiniTest::Spec
   ActiveRecord::Migration.check_pending!
   extend MiniTest::Spec::DSL
 
@@ -16,4 +19,12 @@ class MiniTest::Unit::TestCase
 
   include FactoryGirl::Syntax::Methods
   FactoryGirl.find_definitions
+
+  before :each do
+    DatabaseCleaner.start
+  end
+
+  after :each do
+    DatabaseCleaner.clean
+  end
 end

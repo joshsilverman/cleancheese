@@ -3,10 +3,13 @@ class UsersController < ApplicationController
   protect_from_forgery :except => :receive_sms 
 
   def receive_sms
-    msg = params["Body"]
-    coach = User.find_by(tel: params["To"])
+    text = params["Body"]
+    coach = Coach.find_by(tel: params["To"])
     user = User.find_by(tel: params["From"])
-    if user and coach.complete_todays_goal user
+
+    incoming_message = Post.save_sms user, coach, text
+
+    if user and coach.respond user, incoming_message
       render status: :ok, nothing: true
     else
       render status: :unprocessable_entity, nothing: true
