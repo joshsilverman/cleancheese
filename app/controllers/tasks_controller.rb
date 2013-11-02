@@ -2,9 +2,10 @@ class TasksController < ApplicationController
   respond_to :json
 
   def index
-    tasks = Task\
-      .where("updated_at > ? or complete <> true", 7.days.ago)\
-      .rank(:rank).all
+    show_conditions = "updated_at > ? 
+                       OR complete <> true
+                       OR complete IS NULL"
+    tasks = Task.active.rank(:rank).all
     respond_with tasks
   end
 

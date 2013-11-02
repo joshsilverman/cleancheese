@@ -23,6 +23,7 @@ gem 'jbuilder', '~> 1.2'
 group :development, :test do
   gem 'pry'
   gem 'guard-minitest'
+  gem 'hirb'
 end
 
 group :test do
