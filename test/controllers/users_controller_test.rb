@@ -7,17 +7,18 @@ describe UsersController do
     let(:coach) {create(:coach)}
     let(:user) {create(:user)}
     let(:task) {create(:task)}
-    let(:post_params) {{"To" => coach.tel, "From" => user.tel, "Body" => "message"}}
+    let(:post_params) {{"To" => coach.tel, "From" => user.tel, "Body" => "done"}}
 
     it "should save the incoming post" do
-      Post.where(sender: user, recipient: coach).count.must_equal(0)
-      post :receive_sms, post_params
+      post :receive_sms, post_params 
+
       Post.where(sender: user, recipient: coach).count.must_equal(1)
     end
 
     it "should create response" do
-      Post.where(sender: coach, recipient: user).count.must_equal(0)
+      task
       post :receive_sms, post_params
+
       Post.where(sender: coach, recipient: user).count.must_equal(1)
     end
 

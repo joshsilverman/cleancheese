@@ -13,7 +13,7 @@ gem 'twitter-bootstrap-rails'
 
 gem 'coffee-rails', '~> 4.0.0'
 gem 'jquery-rails'
-gem 'jquery-ui-rails'
+gem 'jquery-ui-rails' 
 gem 'backbone-on-rails'
 
 gem 'turbolinks'
