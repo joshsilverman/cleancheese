@@ -22,6 +22,7 @@ class MiniTest::Spec
 
   before :each do
     DatabaseCleaner.start
+    @routes = Rails.application.routes
   end
 
   after :each do

@@ -14,6 +14,7 @@ class Cleancheese.Views.ProgressHeader extends Backbone.View
     units = [false, false, false, false, false, false, false]
     for task in @collection.where(complete:true)
       date_str = task.get('completed_at')
+      date_str
       if date_str
         date = new Date(date_str)
         day_index = date.getDay()

@@ -1,12 +1,8 @@
 require 'test_helper'
 
-describe 'UsersControllerTest' do
-
-  before :all do
-    @routes = Rails.application.routes
-  end
+describe UsersController do
   
-  describe 'receive_sms' do
+  describe '#receive_sms' do
 
     let(:coach) {create(:coach)}
     let(:user) {create(:user)}

@@ -27,7 +27,11 @@ test:
   timeout: 5000
 
 production:
-  adapter: sqlite3
-  database: db/production.sqlite3
+  adapter: postgresql
+  encoding: unicode
+  database: cheese
   pool: 5
+  username: cheese
+  password: password
+  host: localhost
   timeout: 5000

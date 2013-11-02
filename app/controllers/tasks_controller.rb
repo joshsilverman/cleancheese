@@ -2,7 +2,9 @@ class TasksController < ApplicationController
   respond_to :json
 
   def index
-    tasks = Task.where("updated_at > ? or complete <> true", 7.days.ago).rank(:rank).all
+    tasks = Task\
+      .where("updated_at > ? or complete <> true", 7.days.ago)\
+      .rank(:rank).all
     respond_with tasks
   end
 
@@ -15,7 +17,7 @@ class TasksController < ApplicationController
   end
 
   def update
-    # sanitzie params
+    # sanitize params
     strong_params = params["task"].permit(:name, :complete)
 
     task = Task.find(params[:id])
@@ -24,10 +26,11 @@ class TasksController < ApplicationController
     task.update(rank_position: params[:rank])
 
     # update completed_at
-    task.update(completed_at: task.updated_at) if strong_params[:complete] == true
-    task.update(completed_at: nil) if strong_params[:complete] == false
-
-
+    if strong_params[:complete] == true
+      task.update(completed_at: task.updated_at) 
+    elsif strong_params[:complete] == false
+      task.update(completed_at: nil)
+    end
 
     respond_with Task.update(params[:id], strong_params)
   end
