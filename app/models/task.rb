@@ -1,4 +1,7 @@
 class Task < ActiveRecord::Base
+
+  belongs_to :post
+
   include RankedModel
   ranks :rank
 

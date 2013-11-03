@@ -64,7 +64,7 @@ describe 'Coach' do
   describe '#create_task_for_user' do
     it 'returns false if incoming message does not begin with post' do
       coach = build(:coach)
-      incoming_message = build(:post, text: 'bo go to store')
+      incoming_message = create(:post, text: 'bo go to store')
 
       coach.create_task_for_user(incoming_message).must_equal false
       Task.count.must_equal 0
@@ -72,7 +72,7 @@ describe 'Coach' do
 
     it 'returns task name if incoming message begins with do' do
       coach = build(:coach)
-      incoming_message = build(:post, text: 'do go to store')
+      incoming_message = create(:post, text: 'do go to store')
 
       new_task_name = coach.create_task_for_user(incoming_message)
 
@@ -81,7 +81,7 @@ describe 'Coach' do
 
     it 'creates new task for user with no date' do
       coach = build(:coach)
-      incoming_message = build(:post, text: 'do go to store')
+      incoming_message = create(:post, text: 'do go to store')
 
       coach.create_task_for_user(incoming_message)
       new_task = Task.last
@@ -92,7 +92,7 @@ describe 'Coach' do
 
     it 'creates new task for user with a date' do
       coach = build(:coach)
-      incoming_message = build(:post, text: 'do go to store tomorrow')
+      incoming_message = create(:post, text: 'do go to store tomorrow')
 
       coach.create_task_for_user(incoming_message)
       new_task = Task.last
@@ -100,6 +100,17 @@ describe 'Coach' do
       new_task.name.must_equal 'go to store'
       new_task.complete_by.must_be_kind_of Time
     end
+
+    it 'creates new task that belongs to post' do
+      coach = build(:coach)
+      incoming_message = create(:post, text: 'do go to store')
+
+      coach.create_task_for_user(incoming_message)
+      new_task = Task.last
+
+      new_task.post_id.must_equal incoming_message.id
+    end
+
   end
 
   describe '#interpret_msg_with_complete_by_str' do

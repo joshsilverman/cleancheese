@@ -39,7 +39,7 @@ class Coach < User
     task_name, complete_by = 
       interpret_msg_with_complete_by_str(task_name_with_complete_by_str)
 
-    Task.create name: task_name, complete_by: complete_by
+    incoming_post.tasks.create(name: task_name, complete_by: complete_by)
 
     "I just added a new task: #{task_name}"
   end

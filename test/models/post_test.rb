@@ -1,8 +1,24 @@
 require 'test_helper'
 
 describe 'PostTest' do
+
+  describe '#has_many :tasks' do
+    let(:task) {build(:task)}
+    let(:post) {build(:post)}
+
+    it 'is valid if no tasks associated' do
+      task.valid?.must_equal true
+    end
+
+    it 'is valid if tasks associated' do
+      post.tasks = [task]
+
+      post.tasks.wont_be_empty
+      post.valid?.must_equal true
+    end
+  end
   
-  describe "self.save_sms" do
+  describe '.save_sms' do
 
     let(:sender) {create(:coach)}
     let(:recipient) {create(:user)}
