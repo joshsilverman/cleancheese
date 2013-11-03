@@ -1,4 +1,5 @@
 <span class='name'><%= @task.get('name') %></span>
+<abbr class="timeago" title="<%= @task.get('complete_by') %>"></abbr>
 <span class="btn-group">
   <a class="btn complete" href="#"><i class="icon-ok"></i></a>
   <a class="btn edit" href="#"><i class="icon-pencil"></i></a>

@@ -7,9 +7,13 @@ class Cleancheese.Views.Task extends Backbone.View
     "blur .name": "update_task"
     "keypress .name": "override_enter"
 
+  initialize: ->
+    @configure_timeago()
+
   render: ->
     $(@el).html(@template(task: @model))
     $(@el).addClass('complete') if @model.get('complete')
+    $("abbr.timeago").timeago()
     this
 
   edit_task: (event) ->
@@ -46,3 +50,7 @@ class Cleancheese.Views.Task extends Backbone.View
     event.preventDefault()
     event.stopPropagation()
     $(@el).find('.name').blur()
+
+  configure_timeago: ->
+    $.timeago.settings.allowFuture = true
+    $.timeago.settings.date = true

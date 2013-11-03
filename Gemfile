@@ -16,7 +16,9 @@ gem 'jquery-rails'
 gem 'jquery-ui-rails' 
 gem 'backbone-on-rails'
 
-gem 'turbolinks'
+gem 'rails-timeago'
+
+# gem 'turbolinks'
 
 gem 'jbuilder', '~> 1.2'
 
