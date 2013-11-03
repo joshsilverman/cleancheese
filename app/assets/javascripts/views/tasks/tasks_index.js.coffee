@@ -12,7 +12,7 @@ class Cleancheese.Views.TasksIndex extends Backbone.View
     $(@el).html(@template())
     @collection.each @append_task
     @append_task new Cleancheese.Models.Task
-    $(".tasks").sortable(items: '.task:not(.new)', beforeStop: @update_rank).disableSelection()
+    @make_sortable()
     this
 
   append_task: (task) ->
@@ -38,3 +38,13 @@ class Cleancheese.Views.TasksIndex extends Backbone.View
     task.once('sync', => @collection.fetch())
     @collection.on('sync', => @collection.on('sync', @render, this))
     task.update_rank(task_el.prevAll().length)
+
+  make_sortable: ->
+    $(@el).sortable(
+        items: '.task:not(.new)', 
+        axis: 'y',
+        beforeStop: @update_rank,
+        handle: '.handle',
+        distance: 15,
+        grid: [ 0, 20 ]
+      ).disableSelection()

@@ -1,8 +1,8 @@
+<div class='handle btn-large'><i class='icon-resize-vertical'></i></div>
 <span class='name'><%= @task.get('name') %></span>
 <abbr class="timeago" title="<%= @task.get('complete_by') %>"></abbr>
 <span class="btn-group">
   <a class="btn complete" href="#"><i class="icon-ok"></i></a>
-  <a class="btn edit" href="#"><i class="icon-pencil"></i></a>
   <a class="btn destroy" href="#"><i class="icon-remove"></i></a>
 </span>
 <div style='clear:both'></div>

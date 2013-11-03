@@ -32,6 +32,16 @@
       width:100%;
       background: rgba(255,255,255,.65);
 
+      .handle {
+        position:relative;
+        left:-5px;
+        height:20px;
+        // width:20px;
+        padding:5px 12px;
+        // background:red;
+        float:left;
+      }
+
       .name {
         outline:none;
         font-size: 18px;

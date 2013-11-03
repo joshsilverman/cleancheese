@@ -3,7 +3,7 @@ class Cleancheese.Views.Task extends Backbone.View
   events:
     "click .destroy": "destroy_task"
     "click .complete": "complete_task"
-    "click .edit": "edit_task"
+    "click .name": "edit_task"
     "blur .name": "update_task"
     "keypress .name": "override_enter"
 
