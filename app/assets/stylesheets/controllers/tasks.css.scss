@@ -44,11 +44,16 @@
 
       .name {
         outline:none;
-        font-size: 18px;
+        font-size: 14px;
         line-height: 1.6em;
       }
 
-      .btn-group {
+      .timeago {
+        float:left;
+        color:#676767;
+      }
+
+      .btn {
         float: right;
       }
 
