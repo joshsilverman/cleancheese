@@ -33,6 +33,7 @@ group :test do
   gem "minitest", "~> 4.7"
   gem "turn", "~> 0.9.6"
   gem 'database_cleaner'
+  gem 'mocha'
 end
 
 # Use ActiveModel has_secure_password

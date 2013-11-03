@@ -96,9 +96,12 @@ GEM
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
+    metaclass (0.0.1)
     method_source (0.8.2)
     mime-types (1.25)
     minitest (4.7.5)
+    mocha (0.14.0)
+      metaclass (~> 0.0.1)
     multi_json (1.8.1)
     pg (0.16.0)
     polyglot (0.3.3)
@@ -206,6 +209,7 @@ DEPENDENCIES
   jquery-rails
   jquery-ui-rails
   minitest (~> 4.7)
+  mocha
   pg
   pry
   rails (= 4.0.0)

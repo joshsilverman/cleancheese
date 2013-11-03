@@ -7,11 +7,11 @@ describe 'Coach' do
       user = build(:user)
       incoming_message = build(:post, text: 'done')
 
+      coach.expects(:interpret).returns('response text')
+      coach.expects(:sms).returns(build(:post))
       outgoing_message = coach.respond user, incoming_message
 
       outgoing_message.must_be_kind_of Post
-
-      # skip 'mock sms to return post'
     end
 
     it 'returns false if message cannot be interpreted' do
@@ -30,9 +30,10 @@ describe 'Coach' do
 
     it 'returns string if something actionable' do
       coach = build(:coach)
-      post = build(:post, text: 'done')
+      post = build(:post)
 
-      # coach.interpret(post).must_be_kind_of String
+      coach.expects(:complete_todays_goal).with(post).returns("msg")
+      coach.interpret(post).must_be_kind_of String
     end
   end
 
@@ -41,30 +42,28 @@ describe 'Coach' do
       coach = build(:coach)
       incoming_message = build(:post, text: 'done')
 
+      coach.stubs(:todays_goal).returns(nil)
       outgoing_message = coach.complete_todays_goal incoming_message
 
       outgoing_message.must_equal "Looks like you need to add more goals."
-
-      # skip('mock todays_goal#update, coach#sms')
     end
 
     it 'responds with "nice job" if more goals' do
       coach = build(:coach)
-      next_task = create(:task)
+      next_task = build(:task)
       incoming_message = build(:post, text: 'done')
 
+      coach.stubs(:todays_goal).returns(next_task)
       outgoing_message = coach.complete_todays_goal incoming_message
 
       outgoing_message.must_equal "Nice job"
-
-      # skip('mock todays_goal#update, coach#sms')
     end
   end
 
   describe '#create_task_for_user' do
     it 'returns false if incoming message does not begin with post' do
       coach = build(:coach)
-      incoming_message = create(:post, text: 'bo go to store')
+      incoming_message = build(:post, text: 'bo go to store')
 
       coach.create_task_for_user(incoming_message).must_equal false
       Task.count.must_equal 0
@@ -72,8 +71,9 @@ describe 'Coach' do
 
     it 'returns task name if incoming message begins with do' do
       coach = build(:coach)
-      incoming_message = create(:post, text: 'do go to store')
+      incoming_message = build(:post, text: 'do go to store')
 
+      incoming_message.tasks.expects(:create).returns(true)
       new_task_name = coach.create_task_for_user(incoming_message)
 
       new_task_name.must_equal 'I just added a new task: go to store'
