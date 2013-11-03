@@ -24,7 +24,7 @@
 }
 
 #tasks {
-  h1 {margin-bottom:10px;}
+  h1 {margin-bottom:10px; margin-left:3px;}
   .tasks {
     padding-left: 2px;
     .task {
@@ -45,17 +45,21 @@
 
       .name {
         outline:none;
-        font-size: 14px;
         line-height: 1.6em;
+        font-size: 14px;
+
+        @media (min-width: 481px) { font-size: 15px; }
       }
 
       .timeago {
         float:left;
+        clear:right;
         color:#676767;
       }
 
       .btn {
         float: right;
+        margin-left: 4px;
       }
 
       &:hover {
@@ -64,7 +68,7 @@
 
       &.new {
         font-style: italic;
-        .btn-group {
+        .btn {
           display: none;
         }
       }
