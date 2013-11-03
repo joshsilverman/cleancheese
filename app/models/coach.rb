@@ -1,4 +1,5 @@
 class Coach < User
+  include FuzzyTime
 
   def respond user, incoming_post
     msg = interpret incoming_post
@@ -33,11 +34,14 @@ class Coach < User
   def create_task_for_user incoming_post
     new_task_name_match = incoming_post.text.match(/^do (.+)/)
     return false unless new_task_name_match
-    new_task_name = new_task_name_match[1]
 
-    Task.create name: new_task_name
+    task_name_with_complete_by_str = new_task_name_match[1]
+    task_name, complete_by = 
+      interpret_msg_with_complete_by_str(task_name_with_complete_by_str)
 
-    "I just added a new task: #{new_task_name}"
+    Task.create name: task_name, complete_by: complete_by
+
+    "I just added a new task: #{task_name}"
   end
 
   def send_todays_goal user
@@ -51,4 +55,14 @@ class Coach < User
     msg = "Don't forget your goal for today: #{top_ranked_task.name}"
     sms(user, msg)
   end
+
+  # @todo make private
+  def interpret_msg_with_complete_by_str msg_with_complete_by_str
+
+    msg = strip_complete_by_str msg_with_complete_by_str
+    date = convert_fuzzy_datetime_str_to_datetime msg_with_complete_by_str
+
+    return msg, date
+  end
+
 end

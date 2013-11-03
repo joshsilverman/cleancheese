@@ -5,7 +5,7 @@ class TasksController < ApplicationController
     show_conditions = "updated_at > ? 
                        OR complete <> true
                        OR complete IS NULL"
-    tasks = Task.active.rank(:rank).all
+    tasks = Task.active.rank(:rank)
     respond_with tasks
   end
 

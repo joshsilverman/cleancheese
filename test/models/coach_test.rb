@@ -79,13 +79,44 @@ describe 'Coach' do
       new_task_name.must_equal 'I just added a new task: go to store'
     end
 
-    it 'creates new task for user' do
+    it 'creates new task for user with no date' do
       coach = build(:coach)
       incoming_message = build(:post, text: 'do go to store')
 
       coach.create_task_for_user(incoming_message)
+      new_task = Task.last
 
-      Task.last.name.must_equal 'go to store'
+      new_task.name.must_equal 'go to store'
+      new_task.complete_by.must_equal nil
+    end
+
+    it 'creates new task for user with a date' do
+      coach = build(:coach)
+      incoming_message = build(:post, text: 'do go to store tomorrow')
+
+      coach.create_task_for_user(incoming_message)
+      new_task = Task.last
+
+      new_task.name.must_equal 'go to store'
+      new_task.complete_by.must_be_kind_of Time
+    end
+  end
+
+  describe '#interpret_msg_with_complete_by_str' do
+    let(:coach) {build(:coach)}
+
+    it 'returns msg and nil if no date found' do
+      msg, date = coach.interpret_msg_with_complete_by_str('message')
+
+      msg.must_equal 'message'
+      date.must_equal nil
+    end
+
+    it 'returns msg and obj Time if for "task in three days"' do
+      msg, date = coach.interpret_msg_with_complete_by_str "task in three days"
+
+      msg.must_equal 'task'
+      date.must_be_kind_of Time
     end
   end
 end
