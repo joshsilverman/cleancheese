@@ -10,4 +10,6 @@ Cleancheese::Application.routes.draw do
   end
 
   root to: "main#index"
+
+  mount JasmineRails::Engine => "/specs" if defined?(JasmineRails)
 end

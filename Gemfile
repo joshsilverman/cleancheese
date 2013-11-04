@@ -26,6 +26,7 @@ group :development, :test do
   gem 'pry'
   gem 'guard-minitest'
   gem 'hirb'
+  gem 'jasmine-rails'
 end
 
 group :test do
