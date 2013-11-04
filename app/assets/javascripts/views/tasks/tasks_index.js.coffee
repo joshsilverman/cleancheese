@@ -46,5 +46,7 @@ class Cleancheese.Views.TasksIndex extends Backbone.View
         beforeStop: @update_rank,
         handle: '.handle',
         distance: 15,
-        grid: [ 0, 20 ]
+        grid: [ 0, 18 ],
+        scrollSpeed: 15,
+        tolerance: 'pointer'
       ).disableSelection()

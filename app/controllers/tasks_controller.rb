@@ -23,7 +23,7 @@ class TasksController < ApplicationController
 
     task = Task.find(params[:id])
 
-    #update rank
+    #update rank, but don't include in strong params
     task.update(rank_position: params[:rank])
 
     # update completed_at

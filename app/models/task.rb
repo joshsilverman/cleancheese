@@ -3,7 +3,7 @@ class Task < ActiveRecord::Base
   belongs_to :post
 
   include RankedModel
-  ranks :rank
+  ranks :rank, scope: :active
 
   def self.active
     show_conditions = "updated_at > ? 
