@@ -4,12 +4,12 @@
 src_dir: "app/assets/javascripts"
  # list of file expressions to include as source files
 # relative path from scr_dir
-src_files:
- - "application.{js,coffee}"
+src_files: 
+  - "**/*.{js,coffee}"
  # path to parent directory of spec_files
 # relative path from Rails.root
 # defaults to spec/javascripts
-spec_dir: spec/javascripts
+spec_dir: "app/assets/javascripts/specs"
  # list of file expressions to include as helpers into spec runner
 # relative path from spec_dir
 helpers:
