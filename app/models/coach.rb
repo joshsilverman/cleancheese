@@ -22,7 +22,7 @@ class Coach < User
   end
 
   def complete_todays_goal incoming_post
-    return false unless incoming_post.text.include? "done"
+    return false unless incoming_post.text.downcase.include? "done"
     if todays_goal and todays_goal.update(complete: true, completed_at: Time.now)
       "Nice job"
     else

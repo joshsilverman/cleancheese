@@ -59,6 +59,17 @@ describe 'Coach' do
       outgoing_message.must_equal "Nice job"
     end
 
+    it 'does not return false when "dOnE" is capitalized' do
+      coach = build(:coach)
+      next_task = stub(update: true)
+      coach.stubs(todays_goal: next_task)
+      incoming_message = build(:post, text: 'dOnE')
+
+      outgoing_message = coach.complete_todays_goal incoming_message
+
+      outgoing_message.wont_equal false
+    end
+
     it 'updates goal as complete with completed_at' do
       coach = build(:coach)
       Timecop.freeze
