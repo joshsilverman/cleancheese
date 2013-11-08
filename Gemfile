@@ -35,6 +35,7 @@ group :test do
   gem "turn", "~> 0.9.6"
   gem 'database_cleaner'
   gem 'mocha'
+  gem 'timecop'
 end
 
 # Use ActiveModel has_secure_password

@@ -58,6 +58,20 @@ describe 'Coach' do
 
       outgoing_message.must_equal "Nice job"
     end
+
+    it 'updates goal as complete with completed_at' do
+      coach = build(:coach)
+      Timecop.freeze
+      todays_goal_mock = mock()
+      todays_goal_mock.expects('update')\
+              .with(complete: true, completed_at: Time.now)\
+              .returns(true)
+      incoming_message = build(:post, text: 'done')
+
+      coach.stubs(:todays_goal).returns(todays_goal_mock)
+
+      outgoing_message = coach.complete_todays_goal incoming_message
+    end
   end
 
   describe '#create_task_for_user' do

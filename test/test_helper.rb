@@ -27,6 +27,7 @@ class MiniTest::Spec
 
   after :each do
     DatabaseCleaner.clean
+    Timecop.return
   end
 end
 
