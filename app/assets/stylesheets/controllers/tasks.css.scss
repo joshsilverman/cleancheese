@@ -51,7 +51,17 @@
         @media (min-width: 481px) { font-size: 15px; }
       }
 
+      .epic {
+        // margin:3px;
+        // padding:4px;
+        // opacity:.75;
+        margin-left: 30px;
+        clear:left;
+        float:left;
+      }
+
       .timeago {
+        margin-left: 5px;
         float:left;
         clear:right;
         color:#676767;
