@@ -1,6 +1,7 @@
 class Task < ActiveRecord::Base
 
   belongs_to :post
+  belongs_to :epic
 
   include RankedModel
   ranks :rank, scope: :active

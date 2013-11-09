@@ -1,4 +1,6 @@
 Cleancheese::Application.routes.draw do
+  resources :epics
+
   scope "api" do
     resources :tasks
 

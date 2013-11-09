@@ -6,14 +6,25 @@ describe Task do
     let(:post) {build(:post)}
     let(:task) {build(:task)}
 
-    it 'is valid with associated post' do
+    it 'is valid without associated post' do
       task.valid?.must_equal true
     end
 
-    it 'is valid without associated post' do
+    it 'is valid with associated post' do
       task.post = post
 
       task.post.wont_be_nil
+      task.valid?.must_equal true
+    end
+  end
+
+  describe '#belongs_to :epic' do
+    let(:task) {build(:task)}
+    let(:epic) {build(:epic)}
+
+    it 'is valid with associated epic' do
+      task.epic = epic
+
       task.valid?.must_equal true
     end
   end

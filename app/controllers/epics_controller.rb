@@ -1,0 +1,2 @@
+class EpicsController < ApplicationController
+end
