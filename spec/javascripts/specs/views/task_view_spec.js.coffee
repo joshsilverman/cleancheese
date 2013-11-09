@@ -16,7 +16,7 @@ describe 'TaskView', ->
 
     it 'has .epic when task has epic', ->
       @epic_model = new Cleancheese.Models.Epic(name: 'epic 1')
-      @model.set('epics', [@epic_model])
+      @model.epic = @epic_model
 
       el = @view.render().el
       
