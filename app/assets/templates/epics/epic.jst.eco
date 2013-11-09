@@ -1,0 +1,1 @@
+<span class='epic-label label name'><%= @epic.get('name') %></span>

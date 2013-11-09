@@ -1,0 +1,5 @@
+<div id='epics' class='row-fluid'>
+  <span></span><!-- empty first child to prevent bootstrap first child styling -->
+  <div class='span12'><h2>Epics</h2></div>
+  <div class='epics span12'></div>
+</div>

@@ -3,6 +3,7 @@ Cleancheese::Application.routes.draw do
 
   scope "api" do
     resources :tasks
+    resources :epics
 
     resources :users do
       collection do

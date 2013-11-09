@@ -10,14 +10,14 @@ describe 'TaskView', ->
       el = @view.render().el
       expect($(el).find('.name').html()).toEqual 'task 1'
     
-    it 'does not have .epic when task does not have epic', ->
+    it 'does not have .epic-label when task does not have epic', ->
       el = @view.render().el
-      expect($(el).find('.epic').length).toEqual 0
+      expect($(el).find('.epic-label').length).toEqual 0
 
-    it 'has .epic when task has epic', ->
+    it 'has .epic-label when task has epic', ->
       @epic_model = new Cleancheese.Models.Epic(name: 'epic 1')
       @model.epic = @epic_model
 
       el = @view.render().el
       
-      expect($(el).find('.epic').html()).toEqual 'epic 1'
+      expect($(el).find('.epic-label').html()).toEqual 'epic 1'
