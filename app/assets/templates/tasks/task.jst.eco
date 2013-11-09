@@ -2,5 +2,8 @@
 <span class='name'><%= @task.get('name') %></span>
 <a class="btn complete" href="#"><i class="icon-ok"></i></a>
 <a class="btn destroy hidden-phone" href="#"><i class="icon-remove"></i></a>
+<% if (@epic) : %>
+  <span class="epic label pull-right"><%= @epic.get('name') %></span>
+<% end %>
 <abbr class="timeago" title="<%= @task.get('complete_by') %>"></abbr>
 <div style='clear:both'></div>

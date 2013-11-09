@@ -6,6 +6,3 @@ window.Cleancheese =
   initialize: -> 
     new Cleancheese.Routers.Tasks()
     Backbone.history.start()
-
-$(document).ready ->
-  Cleancheese.initialize()

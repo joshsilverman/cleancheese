@@ -2,11 +2,9 @@ class TasksController < ApplicationController
   respond_to :json
 
   def index
-    show_conditions = "updated_at > ? 
-                       OR complete <> true
-                       OR complete IS NULL"
-    tasks = Task.active.rank(:rank)
-    respond_with tasks
+    tasks = Task.includes(:epic).active.rank(:rank)
+    json = tasks.to_json(include: :epic)
+    render json: json
   end
 
   def show

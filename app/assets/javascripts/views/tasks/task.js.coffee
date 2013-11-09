@@ -11,7 +11,7 @@ class Cleancheese.Views.Task extends Backbone.View
     @configure_timeago()
 
   render: ->
-    $(@el).html(@template(task: @model))
+    $(@el).html(@template(task: @model, epic: @model.epic))
     $(@el).addClass('complete') if @model.get('complete')
     $("abbr.timeago").timeago()
     this

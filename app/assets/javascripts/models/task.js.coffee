@@ -4,6 +4,11 @@ class Cleancheese.Models.Task extends Backbone.Model
     name: "new task"
   }
 
+  epic: null
+
+  initialize: (params) ->
+    @create_epic_model(params)
+
   toggle: ->
     new_state = !@get("complete")
     @once('sync', @test, this)
@@ -16,3 +21,7 @@ class Cleancheese.Models.Task extends Backbone.Model
 
   test: ->
     @fetch()
+
+  create_epic_model: (params) ->
+    if params and params['epic']
+      @epic = new Cleancheese.Models.Epic(params['epic'])

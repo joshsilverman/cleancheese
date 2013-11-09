@@ -7,7 +7,7 @@ class Task < ActiveRecord::Base
   ranks :rank, scope: :active
 
   def self.active
-    show_conditions = "updated_at > ? 
+    show_conditions = "tasks.updated_at > ? 
                        OR complete <> true
                        OR complete IS NULL"
     where(show_conditions, 7.days.ago)
