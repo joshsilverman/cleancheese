@@ -106,6 +106,15 @@ describe 'Coach' do
       new_task_name.must_equal 'I just added a new task: go to store'
     end
 
+    it 'returns task name if incoming message begins with do (case insensitive)' do
+      incoming_message = build(:post, text: 'Do go to store')
+
+      incoming_message.tasks.expects(:create).returns(true)
+      new_task_name = coach.create_task_for_user(user, incoming_message)
+
+      new_task_name.must_equal 'I just added a new task: go to store'
+    end
+
     it 'creates new task for user with no date' do
       incoming_message = create(:post, text: 'do go to store')
 
@@ -160,6 +169,15 @@ describe 'Coach' do
 
     it 'creates a new epic for user' do
       incoming_post.text = 'new epic Healthcare'
+      user.id = 123
+
+      Epic.expects(:create).with(name: 'Healthcare', user_id: user.id)
+
+      coach.create_epic_for_user user, incoming_post
+    end
+
+    it 'creates a new epic for user (case insensitive)' do
+      incoming_post.text = 'NeW EpIc Healthcare'
       user.id = 123
 
       Epic.expects(:create).with(name: 'Healthcare', user_id: user.id)

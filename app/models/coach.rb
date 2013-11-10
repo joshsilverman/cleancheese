@@ -32,7 +32,7 @@ class Coach < User
   end
 
   def create_task_for_user user, incoming_post
-    new_task_name_match = incoming_post.text.match(/^do (.+)/)
+    new_task_name_match = incoming_post.text.match(/^do (.+)/i)
     return false unless new_task_name_match
 
     task_name_with_complete_by_str = new_task_name_match[1]
@@ -45,7 +45,7 @@ class Coach < User
   end
 
   def create_epic_for_user user, incoming_post
-    new_epic_name_match = incoming_post.text.match(/^new epic (.+)/)
+    new_epic_name_match = incoming_post.text.match(/^new epic (.+)/i)
     return false unless new_epic_name_match
 
     new_epic_name = new_epic_name_match[1]
