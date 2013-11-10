@@ -184,7 +184,29 @@ describe 'Coach' do
 
       coach.create_epic_for_user user, incoming_post
     end
+  end
 
+  describe '#show_epics_for_user' do
+    let(:coach) {build(:coach)}
+    let(:user) {build(:user)}
+    let(:incoming_post) {build(:post)}
+
+    it 'returns false if cannot interpret' do
+      incoming_post.text = 'asdf'
+
+      response = coach.show_epics_for_user user, incoming_post
+
+      response.must_equal false
+    end
+
+    it 'returns list of epics if can interpret' do
+      incoming_post.text = 'show epics'
+      user.epics << Epic.new(name: 'Healthcare')
+
+      response = coach.show_epics_for_user user, incoming_post
+      
+      response.must_equal "Epics:\n-Healthcare"
+    end
   end
 
   describe '#interpret_msg_with_complete_by_str' do

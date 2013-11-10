@@ -15,6 +15,7 @@ class Coach < User
     if response = complete_todays_goal(user, incoming_post)
     elsif response = create_task_for_user(user, incoming_post)
     elsif response = create_epic_for_user(user, incoming_post)
+    elsif response = show_epics_for_user(user, incoming_post)
     else
       response = nil
     end
@@ -53,6 +54,15 @@ class Coach < User
     Epic.create(name: new_epic_name, user_id: user.id)
 
     "I created a new epic: #{new_epic_name}"
+  end
+
+  def show_epics_for_user user, incoming_post
+    match = incoming_post.text.match(/^show epics/i)
+    return false unless match
+
+    epics_names = user.epics.map &:name
+
+    (["Epics:"] + epics_names).join("\n-")
   end
 
   def send_todays_goal user
