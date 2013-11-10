@@ -2,7 +2,7 @@ class Coach < User
   include FuzzyTime
 
   def respond user, incoming_post
-    msg = interpret incoming_post
+    msg = interpret(user, incoming_post)
 
     if msg
       sms(user, msg)
@@ -11,17 +11,18 @@ class Coach < User
     end
   end
 
-  def interpret incoming_post
-    if msg = complete_todays_goal(incoming_post)
-    elsif msg = create_task_for_user(incoming_post)
+  def interpret user, incoming_post
+    if response = complete_todays_goal(user, incoming_post)
+    elsif response = create_task_for_user(user, incoming_post)
+    elsif response = create_epic_for_user(user, incoming_post)
     else
-      msg = nil
+      response = nil
     end
 
-    msg
+    response
   end
 
-  def complete_todays_goal incoming_post
+  def complete_todays_goal user, incoming_post
     return false unless incoming_post.text.downcase.include? "done"
     if todays_goal and todays_goal.update(complete: true, completed_at: Time.now)
       "Nice job"
@@ -30,7 +31,7 @@ class Coach < User
     end
   end
 
-  def create_task_for_user incoming_post
+  def create_task_for_user user, incoming_post
     new_task_name_match = incoming_post.text.match(/^do (.+)/)
     return false unless new_task_name_match
 
@@ -41,6 +42,17 @@ class Coach < User
     incoming_post.tasks.create(name: task_name, complete_by: complete_by)
 
     "I just added a new task: #{task_name}"
+  end
+
+  def create_epic_for_user user, incoming_post
+    new_epic_name_match = incoming_post.text.match(/^new epic (.+)/)
+    return false unless new_epic_name_match
+
+    new_epic_name = new_epic_name_match[1]
+
+    Epic.create(name: new_epic_name, user_id: user.id)
+
+    "I created a new epic: #{new_epic_name}"
   end
 
   def send_todays_goal user

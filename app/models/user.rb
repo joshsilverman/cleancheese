@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
 
+  has_many :epics
+
   def todays_goal
     @_todays_goal ||= Task.where('complete = ? OR complete IS NULL', false).order(:rank).limit(1).first
   end
