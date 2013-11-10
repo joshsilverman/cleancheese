@@ -9,8 +9,20 @@ describe 'Coach' do
     it 'calls sms with message' do
       incoming_message.text = 'done'
 
-      coach.expects(:interpret).returns('response text')
-      coach.expects(:sms).returns(build(:post))
+      response = 'response text'
+      coach.expects(:interpret).returns([response, 1])
+      coach.expects(:sms).with(user, response, 1).returns(build(:post))
+      outgoing_message = coach.respond user, incoming_message
+
+      outgoing_message.must_be_kind_of Post
+    end
+
+    it 'calls sms with intent' do
+      incoming_message.text = 'done'
+
+      response = 'response text'
+      coach.expects(:interpret).returns([response, 1])
+      coach.expects(:sms).with(user, response, 1).returns(build(:post))
       outgoing_message = coach.respond user, incoming_message
 
       outgoing_message.must_be_kind_of Post

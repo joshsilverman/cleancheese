@@ -227,7 +227,7 @@ describe Commands do
       response.must_include partial_expected_response
     end
 
-    it 'returns msg with epic details if last coach post with correct intent' do
+    it 'returns msg with options if last coach post with correct intent' do
       posts_stub = stub()
       posts_stub.stubs(:order).returns([Post.new(intent: Post::Intents[:coach][:showed_epics])])
       Post.stubs(:where).returns posts_stub

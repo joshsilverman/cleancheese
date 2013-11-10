@@ -48,7 +48,7 @@ module Commands
 
   def show_epic_details user, incoming_post
     last_coach_post = Post.where(sender: self, recipient: user)\
-                                .order(created_at: :desc).last
+                                .order(created_at: :desc).first
     return false unless last_coach_post
     return false unless last_coach_post.intent == Post::Intents[:coach][:showed_epics]
 
