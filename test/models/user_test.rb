@@ -21,8 +21,18 @@ describe 'User' do
   end
 
   describe '#sms' do
+    let(:coach) {build :coach}
+    let(:user) {build :user}
+    let(:message) {"sample message"}
+    let(:intention) {1}
+
     it 'returns post' do
-      skip('INC')
+      Post.expects(:save_sms).with(coach, user, message, intention)\
+              .returns(Post.new)
+
+      response = coach.sms(user, message, intention)
+
+      assert response.instance_of?(Post) # was unable to use typical expectation
     end
   end
 

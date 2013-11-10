@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
     @_todays_goal ||= Task.where('complete = ? OR complete IS NULL', false).order(:rank).limit(1).first
   end
 
-  def sms recipient, text
+  def sms recipient, text, intention
     unless Rails.env.test?
       twilio.account.sms.messages.create(
         from: tel,
@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
         body: text
       )
     end
-    Post.save_sms self, recipient, text
+    Post.save_sms self, recipient, text, intention
   end
 
   private

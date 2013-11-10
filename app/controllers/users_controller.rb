@@ -7,7 +7,7 @@ class UsersController < ApplicationController
     coach = Coach.find_by(tel: params["To"])
     user = User.find_by(tel: params["From"])
 
-    incoming_message = Post.save_sms user, coach, text
+    incoming_message = Post.save_sms user, coach, text, nil
 
     if user and coach.respond user, incoming_message
       render status: :ok, nothing: true
