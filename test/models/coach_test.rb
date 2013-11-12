@@ -59,32 +59,39 @@ describe 'Coach' do
       intent.must_equal 0
     end
 
-    it 'returns intent of 1 when #create_task_for_user truthy' do
-      coach.expects(:create_task_for_user).with(user, post).returns("msg")
+    it 'returns intent of 1 when #create_task truthy' do
+      coach.expects(:create_task).with(user, post).returns("msg")
       response, intent = coach.interpret(user, post)
 
       intent.must_equal 1
     end
 
-    it 'returns intent of 2 when #create_epic_for_user truthy' do
-      coach.expects(:create_epic_for_user).with(user, post).returns("msg")
+    it 'returns intent of 2 when #create_epic truthy' do
+      coach.expects(:create_epic).with(user, post).returns("msg")
       response, intent = coach.interpret(user, post)
 
       intent.must_equal 2
     end
 
-    it 'returns intent of 3 when #show_epics_for_user truthy' do
-      coach.expects(:show_epics_for_user).with(user, post).returns("msg")
+    it 'returns intent of 3 when #show_epics truthy' do
+      coach.expects(:show_epics).with(user, post).returns("msg")
       response, intent = coach.interpret(user, post)
 
       intent.must_equal 3
     end
 
-    it 'returns intent of 4 when #show_epics_for_user truthy' do
+    it 'returns intent of 4 when #show_epics truthy' do
       coach.expects(:show_epic_details).with(user, post).returns("msg")
       response, intent = coach.interpret(user, post)
 
       intent.must_equal 4
+    end
+
+    it 'returns intent of 5 when #hide_epic truthy' do
+      coach.expects(:hide_epic).with(user, post).returns("msg")
+      response, intent = coach.interpret(user, post)
+
+      intent.must_equal 5
     end
   end
 

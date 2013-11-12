@@ -2,6 +2,7 @@ class Post < ActiveRecord::Base
   belongs_to :sender, class_name: "User"
   belongs_to :recipient, class_name: "User"
   has_many :tasks
+  has_one :epic
 
   # intents
   Intents = {
@@ -10,7 +11,8 @@ class Post < ActiveRecord::Base
         created_task: 1,
         created_epic: 2,
         showed_epics: 3,
-        showed_epic_details: 4
+        showed_epic_details: 4,
+        hide_epic: 5
     },
       user: {
       }

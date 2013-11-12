@@ -27,14 +27,16 @@ class Coach < User
   def interpret user, incoming_post
     if response = complete_todays_goal(user, incoming_post)
       intent = Post::Intents[:coach][:completed_todays_goal]
-    elsif response = create_task_for_user(user, incoming_post)
+    elsif response = create_task(user, incoming_post)
       intent = Post::Intents[:coach][:created_task]
-    elsif response = create_epic_for_user(user, incoming_post)
+    elsif response = create_epic(user, incoming_post)
       intent = Post::Intents[:coach][:created_epic]
-    elsif response = show_epics_for_user(user, incoming_post)
+    elsif response = show_epics(user, incoming_post)
       intent = Post::Intents[:coach][:showed_epics]
     elsif response = show_epic_details(user, incoming_post)
       intent = Post::Intents[:coach][:showed_epic_details]
+    elsif response = hide_epic(user, incoming_post)
+      intent = Post::Intents[:coach][:hide_epic]
     else
       intent = nil
       response = nil

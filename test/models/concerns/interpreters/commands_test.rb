@@ -49,7 +49,7 @@ describe Commands do
     end
   end
 
-  describe '#create_task_for_user' do
+  describe '#create_task' do
     let(:coach) {build(:coach)}
     let(:user) {build(:user)}
 
@@ -57,7 +57,7 @@ describe Commands do
 
       incoming_message = build(:post, text: 'bo go to store')
 
-      coach.create_task_for_user(user, incoming_message).must_equal false
+      coach.create_task(user, incoming_message).must_equal false
       Task.count.must_equal 0
     end
 
@@ -65,7 +65,7 @@ describe Commands do
       incoming_message = build(:post, text: 'do go to store')
 
       incoming_message.tasks.expects(:create).returns(true)
-      new_task_name = coach.create_task_for_user(user, incoming_message)
+      new_task_name = coach.create_task(user, incoming_message)
 
       new_task_name.must_equal 'I just added a new task: go to store'
     end
@@ -74,7 +74,7 @@ describe Commands do
       incoming_message = build(:post, text: 'Do go to store')
 
       incoming_message.tasks.expects(:create).returns(true)
-      new_task_name = coach.create_task_for_user(user, incoming_message)
+      new_task_name = coach.create_task(user, incoming_message)
 
       new_task_name.must_equal 'I just added a new task: go to store'
     end
@@ -82,7 +82,7 @@ describe Commands do
     it 'creates new task for user with no date' do
       incoming_message = create(:post, text: 'do go to store')
 
-      coach.create_task_for_user(user, incoming_message)
+      coach.create_task(user, incoming_message)
       new_task = Task.last
 
       new_task.name.must_equal 'go to store'
@@ -92,7 +92,7 @@ describe Commands do
     it 'creates new task for user with a date' do
       incoming_message = create(:post, text: 'do go to store tomorrow')
 
-      coach.create_task_for_user(user, incoming_message)
+      coach.create_task(user, incoming_message)
       new_task = Task.last
 
       new_task.name.must_equal 'go to store'
@@ -102,14 +102,14 @@ describe Commands do
     it 'creates new task that belongs to post' do
       incoming_message = create(:post, text: 'do go to store')
 
-      coach.create_task_for_user(user, incoming_message)
+      coach.create_task(user, incoming_message)
       new_task = Task.last
 
       new_task.post_id.must_equal incoming_message.id
     end
   end
 
-  describe '#create_epic_for_user' do
+  describe '#create_epic' do
     let(:coach) {build(:coach)}
     let(:user) {build(:user)}
     let(:incoming_post) {build(:post)}
@@ -117,7 +117,7 @@ describe Commands do
     it 'returns false if cannot interpret' do
       incoming_post.text = 'asdf'
 
-      response = coach.create_epic_for_user user, incoming_post
+      response = coach.create_epic user, incoming_post
 
       response.must_equal false
     end
@@ -125,7 +125,7 @@ describe Commands do
     it 'returns success message if can interpret' do
       incoming_post.text = 'new epic Healthcare'
 
-      response = coach.create_epic_for_user user, incoming_post
+      response = coach.create_epic user, incoming_post
       
       response.must_equal "I created a new epic: Healthcare"
     end
@@ -136,7 +136,7 @@ describe Commands do
 
       Epic.expects(:create).with(name: 'Healthcare', user_id: user.id)
 
-      coach.create_epic_for_user user, incoming_post
+      coach.create_epic user, incoming_post
     end
 
     it 'creates a new epic for user (case insensitive)' do
@@ -145,11 +145,11 @@ describe Commands do
 
       Epic.expects(:create).with(name: 'Healthcare', user_id: user.id)
 
-      coach.create_epic_for_user user, incoming_post
+      coach.create_epic user, incoming_post
     end
   end
 
-  describe '#show_epics_for_user' do
+  describe '#show_epics' do
     let(:coach) {build(:coach)}
     let(:user) {build(:user)}
     let(:incoming_post) {build(:post)}
@@ -157,7 +157,7 @@ describe Commands do
     it 'returns false if cannot interpret' do
       incoming_post.text = 'asdf'
 
-      response = coach.show_epics_for_user user, incoming_post
+      response = coach.show_epics user, incoming_post
 
       response.must_equal false
     end
@@ -165,17 +165,30 @@ describe Commands do
     it 'returns list of epics if can interpret' do
       incoming_post.text = 'show epics'
       user.epics << Epic.new(name: 'Healthcare')
+      user.epics.stubs(:visible).returns(user.epics)
 
-      response = coach.show_epics_for_user user, incoming_post
+      response = coach.show_epics user, incoming_post
       
       response.must_include "Epics:\n (1) Healthcare"
+    end
+
+    it 'returns list of epics excluding hidden epics' do
+      incoming_post.text = 'show epics'
+      user.save
+      user.epics << Epic.create(name: 'Healthcare')
+      user.epics << Epic.create(name: 'hidden epic', hidden: true)
+
+      response = coach.show_epics user, incoming_post
+      
+      response.wont_include 'hidden epic'
     end
 
     it 'returns list of epics with actions if can interpret' do
       incoming_post.text = 'show epics'
       user.epics << Epic.new(name: 'Healthcare')
+      user.epics.stubs(:visible).returns(user.epics)
 
-      response = coach.show_epics_for_user user, incoming_post
+      response = coach.show_epics user, incoming_post
       
       expected_response = "Epics:\n (1) Healthcare\n\nReply '1','2' ... for options"
       response.must_equal expected_response
@@ -227,6 +240,10 @@ describe Commands do
       response.must_include partial_expected_response
     end
 
+    it 'ignores hidden epics when finding correct epic' do
+      skip "implement"
+    end
+
     it 'returns msg with options if last coach post with correct intent' do
       posts_stub = stub()
       posts_stub.stubs(:order).returns([Post.new(intent: Post::Intents[:coach][:showed_epics])])
@@ -239,6 +256,98 @@ describe Commands do
       response = coach.show_epic_details user, incoming_post
 
       response.must_include partial_expected_response
+    end
+
+    it 'associates msg with user request' do
+      posts_stub = stub()
+      posts_stub.stubs(:order).returns([Post.new(intent: Post::Intents[:coach][:showed_epics])])
+      Post.stubs(:where).returns posts_stub
+
+      epic = Epic.create(name: 'Healthcare', user: user)
+      incoming_post.text = '1'
+      partial_expected_response = "Reply '1' to hide"
+
+      response = coach.show_epic_details user, incoming_post
+
+      incoming_post.epic.must_equal epic
+    end
+  end
+
+  describe '#hide_epic' do
+    let(:coach) {build(:coach)}
+    let(:user) {build(:user)}
+    let(:incoming_post) {build(:post)}
+
+    it 'returns false unless last coach post was showing an epic' do
+      response = coach.hide_epic user, incoming_post
+
+      response.must_equal false
+    end
+
+    it 'returns false if user does not provide "1"' do
+      posts_stub = stub()
+      last_coach_post = Post.new(intent: Post::Intents[:coach][:hide_epic])
+      posts_stub.stubs(:order).returns([last_coach_post])
+      Post.stubs(:where).returns posts_stub
+
+      incoming_post.text = 'abc'
+      response = coach.hide_epic user, incoming_post
+
+      response.must_equal false
+    end
+
+    it 'returns false if no epic to hide' do
+      posts_stub = stub()
+      last_coach_post = Post.new(intent: Post::Intents[:coach][:showed_epic_details])
+      posts_stub.stubs(:order).returns([last_coach_post])
+      Post.stubs(:where).returns posts_stub
+
+      incoming_post.text = '1'
+      coach.hide_epic(user, incoming_post).must_equal false
+    end
+
+    it 'updates epic to hidden if user provides "1"' do
+      coach_posts_stub = stub()
+      last_coach_post = Post.new(intent: Post::Intents[:coach][:showed_epic_details])
+      coach_posts_stub.stubs(:order).returns([last_coach_post])
+      Post.stubs(:where).with(sender: coach, recipient: user).returns coach_posts_stub
+
+      user_posts_stub = stub()
+      epic = Epic.new(name: "Abc Epic")
+      last_user_post = Post.new(text: 'message', epic: epic)
+
+      user_posts = stub()
+      user_posts.expects(:[]).returns(last_user_post)
+      user_posts_stub.stubs(:order).returns(user_posts)
+      Post.stubs(:where).with(sender: user, recipient: coach).returns user_posts_stub
+
+      epic.expects(:update).with(hidden: true)
+      incoming_post.text = '1'
+
+      coach.hide_epic user, incoming_post
+    end
+
+    it 'returns "I hide epic_name" if epic found' do
+      coach_posts_stub = stub()
+      last_coach_post = Post.new(intent: Post::Intents[:coach][:showed_epic_details])
+      coach_posts_stub.stubs(:order).returns([last_coach_post])
+      Post.stubs(:where).with(sender: coach, recipient: user).returns coach_posts_stub
+
+      user_posts_stub = stub()
+      epic = Epic.new(name: "Abc Epic")
+      last_user_post = Post.new(text: 'message', epic: epic)
+
+      user_posts = stub()
+      user_posts.expects(:[]).returns(last_user_post)
+      user_posts_stub.stubs(:order).returns(user_posts)
+      Post.stubs(:where).with(sender: user, recipient: coach).returns user_posts_stub
+
+      incoming_post.epic = epic
+      incoming_post.text = '1'
+
+      response = coach.hide_epic user, incoming_post
+
+      response.must_include "OK, I hid #{epic.name}"
     end
   end
 end
