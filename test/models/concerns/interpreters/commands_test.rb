@@ -162,7 +162,7 @@ describe Commands do
       response.must_equal false
     end
 
-    it 'returns list of epics if can interpret' do
+    it 'returns list of epics if give "show epics"' do
       incoming_post.text = 'show epics'
       user.epics << Epic.new(name: 'Healthcare')
       user.epics.stubs(:visible).returns(user.epics)
@@ -170,6 +170,15 @@ describe Commands do
       response = coach.show_epics user, incoming_post
       
       response.must_include "Epics:\n (1) Healthcare"
+    end
+
+    it 'returns list of epics if givin "epics"' do
+      incoming_post.text = 'epics'
+      user.epics.stubs(:visible).returns(user.epics)
+
+      response = coach.show_epics user, incoming_post
+      
+      assert(response)
     end
 
     it 'returns list of epics excluding hidden epics' do
@@ -190,7 +199,7 @@ describe Commands do
 
       response = coach.show_epics user, incoming_post
       
-      expected_response = "Epics:\n (1) Healthcare\n\nReply '1','2' ... for options"
+      expected_response = "Epics:\n (1) Healthcare\n\n\nReply '1','2' ... for options"
       response.must_equal expected_response
     end
   end
