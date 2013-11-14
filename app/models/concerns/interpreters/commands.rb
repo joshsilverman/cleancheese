@@ -45,7 +45,7 @@ module Commands
     response = "Epics:\n"
     
     user.epics.visible.each_with_index do |epic, i|
-      response += " (#{i+1}) #{epic.name}\n"
+      response += " (#{i+1}) #{epic.name}#{" [#{epic.abbreviation}]" if epic.abbreviation}\n"
     end
     response += "\n\nReply '1','2' ... for options"
 
@@ -62,31 +62,62 @@ module Commands
     epic_index = incoming_post.text.to_i - 1
     return false unless epic_index >= 0
 
-    epic = user.epics.offset(epic_index).first
+    epic = user.epics.visible.offset(epic_index).first
     return false unless epic
     incoming_post.update(epic: epic)
     
-    actions = "\n\nReply '1' to hide"
+    actions = "\n\nReply '1' to hide\nReply '2' to abbreviate"
 
     "#{epic.name} Epic Options:" + actions
   end
 
   # @todo: move to EpicController
   def hide_epic user, incoming_post
-    last_coach_post = Post.where(sender: self, recipient: user)\
-                                .order(created_at: :desc).first
-    return false unless last_coach_post
-    return false unless last_coach_post.intent == Post::Intents[:coach][:showed_epic_details]
+    prev_intent_of_coach = self.prev_intent_to user
+    return false unless prev_intent_of_coach ==  Post::Intents[:coach][:showed_epic_details]
+
     return false unless incoming_post.text == '1'
     
-    last_user_post = Post.where(sender: user, recipient: self)\
-                                .order(created_at: :desc)[1]
-
-    return false unless last_user_post and last_user_post.epic
-    epic = last_user_post.epic
+    epic = selected_epic_for user
+    return false unless epic
 
     epic.update(hidden:true)
 
     "OK, I hid #{epic.name}"
   end
+
+  def select_abbreviation_option user, incoming_post
+    prev_intent_of_coach = self.prev_intent_to user
+    return false unless prev_intent_of_coach ==  Post::Intents[:coach][:showed_epic_details]
+
+    return false unless incoming_post.text == '2'
+
+    epic = selected_epic_for user
+    return false unless epic
+
+    incoming_post.update epic: epic
+
+    "How would you like to abbreviate '#{epic.name}'?"
+  end
+
+  # @todo: move to EpicController
+  def abbreviate_epic user, incoming_post
+    prev_intent_of_coach = self.prev_intent_to user
+    return false unless prev_intent_of_coach ==  Post::Intents[:coach][:solicit_abbreviation]
+
+    epic = selected_epic_for user
+    return false unless epic
+
+    return false if user.epics.where(abbreviation: incoming_post.text).exists?
+    epic.update(abbreviation: incoming_post.text)
+
+    "Ok, you can now refer to '#{epic.name}' as '#{epic.abbreviation}'"
+  end
+
+  private
+
+    def selected_epic_for user
+      last_post = user.prev_post_to self, 1
+      last_post.epic if last_post
+    end
 end

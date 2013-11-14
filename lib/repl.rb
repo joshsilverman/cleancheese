@@ -10,20 +10,30 @@ def respond text
   incoming_message = Post.save_sms user, coach, text, nil
   response = coach.respond user, incoming_message
 
+  puts ''
   if response
-    response.text.split("\n").map { |l| puts "> #{l}" } 
+    response.text.split("\n").each_with_index do |l, i| 
+      if i == 0
+        puts "coach >  #{l}"
+      else
+        puts "      >  #{l}"
+      end
+    end
   else
-    print '> '
-    print 'I couldn\'t interpret that. :/'
+    puts 'coach >  I couldn\'t interpret that. :/'
   end
 end
 
 def repl
   puts ''
-  print '> '
+  print 'you   >  '
   input = gets.chomp
-  respond input
-  repl
+
+  unless input == 'exit'
+    reload!;
+    respond input 
+    repl
+  end
 end
 
 init

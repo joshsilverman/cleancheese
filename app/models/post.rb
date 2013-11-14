@@ -9,10 +9,13 @@ class Post < ActiveRecord::Base
       coach: {
         completed_todays_goal: 0,
         created_task: 1,
+
         created_epic: 2,
         showed_epics: 3,
         showed_epic_details: 4,
-        hide_epic: 5
+        hide_epic: 5,
+        solicit_abbreviation: 6,
+        abbreviated_epic: 7
     },
       user: {
       }

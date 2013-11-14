@@ -285,7 +285,7 @@ describe Commands do
   describe '#hide_epic' do
     let(:coach) {build(:coach)}
     let(:user) {build(:user)}
-    let(:incoming_post) {build(:post)}
+    let(:incoming_post) {build(:post, sender: user, recipient: coach)}
 
     it 'returns false unless last coach post was showing an epic' do
       response = coach.hide_epic user, incoming_post
@@ -294,10 +294,9 @@ describe Commands do
     end
 
     it 'returns false if user does not provide "1"' do
-      posts_stub = stub()
-      last_coach_post = Post.new(intent: Post::Intents[:coach][:hide_epic])
-      posts_stub.stubs(:order).returns([last_coach_post])
-      Post.stubs(:where).returns posts_stub
+      coach.save
+      last_coach_post = Post.create(intent: Post::Intents[:coach][:showed_epic_details],
+                                    sender: coach)
 
       incoming_post.text = 'abc'
       response = coach.hide_epic user, incoming_post
@@ -306,57 +305,163 @@ describe Commands do
     end
 
     it 'returns false if no epic to hide' do
-      posts_stub = stub()
-      last_coach_post = Post.new(intent: Post::Intents[:coach][:showed_epic_details])
-      posts_stub.stubs(:order).returns([last_coach_post])
-      Post.stubs(:where).returns posts_stub
+      coach.save
+      last_coach_post = Post.create(intent: Post::Intents[:coach][:showed_epic_details],
+                                    sender: coach)
 
       incoming_post.text = '1'
       coach.hide_epic(user, incoming_post).must_equal false
     end
 
     it 'updates epic to hidden if user provides "1"' do
-      coach_posts_stub = stub()
-      last_coach_post = Post.new(intent: Post::Intents[:coach][:showed_epic_details])
-      coach_posts_stub.stubs(:order).returns([last_coach_post])
-      Post.stubs(:where).with(sender: coach, recipient: user).returns coach_posts_stub
+      coach.save
+      last_coach_post = Post.create(intent: Post::Intents[:coach][:showed_epic_details],
+                                    sender: coach,
+                                    recipient: user)
 
-      user_posts_stub = stub()
-      epic = Epic.new(name: "Abc Epic")
-      last_user_post = Post.new(text: 'message', epic: epic)
+      last_user_post = Post.create(text: 'message', sender: user, recipient: coach)
+      epic = Epic.create(name: "Abc Epic", post: last_user_post, user: user)
+      incoming_post.save
 
-      user_posts = stub()
-      user_posts.expects(:[]).returns(last_user_post)
-      user_posts_stub.stubs(:order).returns(user_posts)
-      Post.stubs(:where).with(sender: user, recipient: coach).returns user_posts_stub
-
-      epic.expects(:update).with(hidden: true)
       incoming_post.text = '1'
-
       coach.hide_epic user, incoming_post
+
+      epic.reload.hidden.must_equal true
     end
 
     it 'returns "I hide epic_name" if epic found' do
-      coach_posts_stub = stub()
-      last_coach_post = Post.new(intent: Post::Intents[:coach][:showed_epic_details])
-      coach_posts_stub.stubs(:order).returns([last_coach_post])
-      Post.stubs(:where).with(sender: coach, recipient: user).returns coach_posts_stub
+      coach.save
+      last_coach_post = Post.create(intent: Post::Intents[:coach][:showed_epic_details],
+                                    sender: coach,
+                                    recipient: user)
 
-      user_posts_stub = stub()
-      epic = Epic.new(name: "Abc Epic")
-      last_user_post = Post.new(text: 'message', epic: epic)
+      last_user_post = Post.create(text: 'message', sender: user, recipient: coach)
+      epic = Epic.create(name: "Abc Epic", post: last_user_post, user: user)
+      incoming_post.save
 
-      user_posts = stub()
-      user_posts.expects(:[]).returns(last_user_post)
-      user_posts_stub.stubs(:order).returns(user_posts)
-      Post.stubs(:where).with(sender: user, recipient: coach).returns user_posts_stub
-
-      incoming_post.epic = epic
       incoming_post.text = '1'
-
       response = coach.hide_epic user, incoming_post
 
       response.must_include "OK, I hid #{epic.name}"
+    end
+  end
+
+  describe '#select_abbreviation_option' do
+    let(:coach) { build(:coach) }
+    let(:user) { build(:user) }
+    let(:incoming_post) { build(:post) }
+
+    it 'can only be selected if prev intent to user was :showed_epic_details' do
+      response = coach.select_abbreviation_option user, incoming_post
+      response.must_equal false
+    end
+
+    it 'returns false if 2 not passed' do
+      coach.stubs(:prev_intent_to).returns Post::Intents[:coach][:showed_epic_details]
+      incoming_post.text = '1'
+
+      response = coach.select_abbreviation_option user, incoming_post
+      response.must_equal false
+    end
+
+    it 'returns false if no epic selected' do
+      coach.stubs(:prev_intent_to).returns Post::Intents[:coach][:showed_epic_details]
+      incoming_post.text = '2'
+
+      response = coach.select_abbreviation_option user, incoming_post
+      response.must_equal false
+    end
+
+
+    it 'returns "How would you like to abbreviate \'Healthcare\'?" when selected' do
+      coach.stubs(:prev_intent_to).returns Post::Intents[:coach][:showed_epic_details]
+      coach.stubs(:selected_epic_for).returns Epic.new name: 'Healthcare'
+      incoming_post.text = '2'
+
+      response = coach.select_abbreviation_option user, incoming_post
+      response.must_equal "How would you like to abbreviate 'Healthcare'?"
+    end
+
+    it 'sets the epic id on the incoming_post' do
+      coach.stubs(:prev_intent_to).returns Post::Intents[:coach][:showed_epic_details]
+      user.save
+      epic = Epic.create name: 'Healthcare', user: user
+      coach.stubs(:selected_epic_for).returns epic
+      incoming_post.text = '2'
+      incoming_post.save
+
+      response = coach.select_abbreviation_option user, incoming_post
+      incoming_post.reload.epic.must_equal epic
+    end
+  end
+
+  describe '#abbreviate_epic' do
+    let(:user) { create(:user) }
+    let(:coach) { create(:coach) }
+    let(:incoming_post) { create(:post, sender: user, recipient: coach) }
+
+    it 'returns false if previous intent of coach not :showed_epic_details' do
+      create(:post, sender: coach, recipient: user)
+
+      response = coach.abbreviate_epic user, incoming_post
+
+      response.must_equal false
+    end
+
+    it 'returns false if no epic selected' do 
+      coach.stubs(:prev_intent_to).returns Post::Intents[:coach][:showed_epic_details]
+      incoming_post.save
+      prev_post_to_coach = create(:post, sender: user, recipient: coach)
+
+      response = coach.abbreviate_epic user, incoming_post
+
+      response.must_equal false
+    end
+
+
+    it 'updates abbreviation on epic' do 
+      coach.stubs(:prev_intent_to).returns Post::Intents[:coach][:solicit_abbreviation]
+      prev_post_to_coach_offset_1 = create(:post, sender: user, recipient: coach)
+      
+      epic = create(:epic, user: user)
+      prev_post_to_coach_offset_1.epic = epic
+
+      incoming_post.text = 'HC'
+      incoming_post.save
+
+      response = coach.abbreviate_epic user, incoming_post
+
+      epic.reload.abbreviation.must_equal "HC"
+    end
+
+    it 'returns confirmation when epic abbreviated' do 
+      coach.stubs(:prev_intent_to).returns Post::Intents[:coach][:solicit_abbreviation]
+      prev_post_to_coach_offset_1 = create(:post, sender: user, recipient: coach)
+      
+      epic = create(:epic, user: user, name: 'Healthcare')
+      prev_post_to_coach_offset_1.epic = epic
+
+      incoming_post.text = 'HC'
+      incoming_post.save
+
+      response = coach.abbreviate_epic user, incoming_post
+
+      response.must_equal "Ok, you can now refer to 'Healthcare' as 'HC'"
+    end
+
+    it 'ensure abbreviation not duplicate' do 
+      coach.stubs(:prev_intent_to).returns Post::Intents[:coach][:solicit_abbreviation]
+      prev_post_to_coach_offset_1 = create(:post, sender: user, recipient: coach)
+      
+      create(:epic, user: user, abbreviation: 'HC')
+      epic = create(:epic, user: user, name: 'Healthcare')
+      prev_post_to_coach_offset_1.epic = epic
+
+      incoming_post.text = 'HC'
+      incoming_post.save
+
+      response = coach.abbreviate_epic user, incoming_post
+      response.must_equal false
     end
   end
 end

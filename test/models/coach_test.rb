@@ -1,6 +1,7 @@
 require 'test_helper'
 
 describe 'Coach' do
+  
   describe '#respond' do
     let(:coach) {build(:coach)}
     let(:user) {build(:user)}
@@ -92,6 +93,20 @@ describe 'Coach' do
       response, intent = coach.interpret(user, post)
 
       intent.must_equal 5
+    end
+
+    it 'returns intent of 6 when #select_abbreviation_option truthy' do
+      coach.expects(:select_abbreviation_option).with(user, post).returns("msg")
+      response, intent = coach.interpret(user, post)
+
+      intent.must_equal 6
+    end
+
+    it 'returns intent of 7 when #abbreviate_epic truthy' do
+      coach.expects(:abbreviate_epic).with(user, post).returns("msg")
+      response, intent = coach.interpret(user, post)
+
+      intent.must_equal 7
     end
   end
 

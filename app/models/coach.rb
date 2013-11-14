@@ -37,6 +37,10 @@ class Coach < User
       intent = Post::Intents[:coach][:showed_epic_details]
     elsif response = hide_epic(user, incoming_post)
       intent = Post::Intents[:coach][:hide_epic]
+    elsif response = select_abbreviation_option(user, incoming_post)
+      intent = Post::Intents[:coach][:solicit_abbreviation]
+    elsif response = abbreviate_epic(user, incoming_post)
+      intent = Post::Intents[:coach][:abbreviated_epic]
     else
       intent = nil
       response = nil
@@ -53,5 +57,6 @@ class Coach < User
 
     return msg, date
   end
+
 
 end

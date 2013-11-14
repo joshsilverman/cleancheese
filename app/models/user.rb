@@ -2,6 +2,16 @@ class User < ActiveRecord::Base
 
   has_many :epics
 
+  def prev_post_to user, i = 0
+    Post.where(sender: self, recipient: user)\
+        .order(created_at: :desc).offset(i).first
+  end
+
+  def prev_intent_to user, i = 0
+    prev_post = prev_post_to user, i
+    prev_post.intent if prev_post
+  end
+
   def todays_goal
     @_todays_goal ||= Task.where('complete = ? OR complete IS NULL', false).order(:rank).limit(1).first
   end
