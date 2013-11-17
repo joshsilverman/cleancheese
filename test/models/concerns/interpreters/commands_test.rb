@@ -51,36 +51,36 @@ describe Commands do
 
   describe '#create_task' do
     let(:coach) {build(:coach)}
-    let(:user) {build(:user)}
+    let(:user) {create(:user)}
+    let(:incoming_message) { create(:post, sender: user) }
 
     it 'returns false if incoming message does not begin with post' do
-
-      incoming_message = build(:post, text: 'bo go to store')
+      incoming_message.text = 'bo go to store'
 
       coach.create_task(user, incoming_message).must_equal false
       Task.count.must_equal 0
     end
 
     it 'returns task name if incoming message begins with do' do
-      incoming_message = build(:post, text: 'do go to store')
+      incoming_message.text = 'do go to store'
 
-      incoming_message.tasks.expects(:create).returns(true)
+      Task.expects(:create).returns(Task.new)
       new_task_name = coach.create_task(user, incoming_message)
 
       new_task_name.must_equal 'I just added a new task: go to store'
     end
 
     it 'returns task name if incoming message begins with do (case insensitive)' do
-      incoming_message = build(:post, text: 'Do go to store')
+      incoming_message.text = 'Do go to store'
 
-      incoming_message.tasks.expects(:create).returns(true)
+      Task.expects(:create).returns(Task.new)
       new_task_name = coach.create_task(user, incoming_message)
 
       new_task_name.must_equal 'I just added a new task: go to store'
     end
 
     it 'creates new task for user with no date' do
-      incoming_message = create(:post, text: 'do go to store')
+      incoming_message.text = 'do go to store'
 
       coach.create_task(user, incoming_message)
       new_task = Task.last
@@ -90,7 +90,7 @@ describe Commands do
     end
 
     it 'creates new task for user with a date' do
-      incoming_message = create(:post, text: 'do go to store tomorrow')
+      incoming_message.text = 'do go to store tomorrow'
 
       coach.create_task(user, incoming_message)
       new_task = Task.last
@@ -100,13 +100,40 @@ describe Commands do
     end
 
     it 'creates new task that belongs to post' do
-      incoming_message = create(:post, text: 'do go to store')
+      incoming_message.text = 'do go to store'
 
       coach.create_task(user, incoming_message)
       new_task = Task.last
 
       new_task.post_id.must_equal incoming_message.id
     end
+
+    it 'returns false if leading abbreviation does not exist' do
+      incoming_message.text = 'HC create account'
+
+      response = coach.create_task(user, incoming_message)
+      
+      response.must_equal false
+    end
+
+    it 'associates new task with epic if abbreviation exists' do
+      epic = Epic.create(user: user, abbreviation: 'HC')
+      incoming_message.text = 'HC create account'
+
+      coach.create_task(user, incoming_message)
+
+      Task.last.epic.must_equal epic
+    end
+
+    # it 'wont associate new task with epic if abbreviation is do' do
+    #   epic = Epic.create(user: user, abbreviation: 'do')
+    #   incoming_message.text = 'do create account'
+
+    #   coach.create_task(user, incoming_message)
+
+    #   # binding.pry
+    #   Task.last.epic.must_equal nil
+    # end
   end
 
   describe '#create_epic' do
@@ -216,9 +243,8 @@ describe Commands do
     end
 
     it 'returns false if last coach post not Post::Intents[:coach][:showed_epics]' do
-      posts_stub = stub()
-      posts_stub.stubs(:order).returns([Post.new])
-      Post.stubs(:where).returns posts_stub
+      coach.expects(:prev_intent_to).with(user)\
+            .returns Post::Intents[:coach][:showed_epics]
 
       response = coach.show_epic_details user, incoming_post
 
@@ -226,9 +252,8 @@ describe Commands do
     end
 
     it 'returns false if incoming_post text not integer' do
-      posts_stub = stub()
-      posts_stub.stubs(:order).returns([Post.new(intent: Post::Intents[:coach][:showed_epics])])
-      Post.stubs(:where).returns posts_stub
+      coach.stubs(:prev_intent_to).with(user)\
+            .returns Post::Intents[:coach][:showed_epics]
 
       response = coach.show_epic_details user, incoming_post
 
@@ -236,9 +261,8 @@ describe Commands do
     end
 
     it 'returns msg with epic details if last coach post with correct intent' do
-      posts_stub = stub()
-      posts_stub.stubs(:order).returns([Post.new(intent: Post::Intents[:coach][:showed_epics])])
-      Post.stubs(:where).returns posts_stub
+      coach.stubs(:prev_intent_to).with(user)\
+            .returns Post::Intents[:coach][:showed_epics]
 
       Epic.create(name: 'Healthcare', user: user)
       incoming_post.text = '1'
@@ -254,9 +278,8 @@ describe Commands do
     end
 
     it 'returns msg with options if last coach post with correct intent' do
-      posts_stub = stub()
-      posts_stub.stubs(:order).returns([Post.new(intent: Post::Intents[:coach][:showed_epics])])
-      Post.stubs(:where).returns posts_stub
+      coach.stubs(:prev_intent_to).with(user)\
+            .returns Post::Intents[:coach][:showed_epics]
 
       Epic.create(name: 'Healthcare', user: user)
       incoming_post.text = '1'
@@ -268,9 +291,8 @@ describe Commands do
     end
 
     it 'associates msg with user request' do
-      posts_stub = stub()
-      posts_stub.stubs(:order).returns([Post.new(intent: Post::Intents[:coach][:showed_epics])])
-      Post.stubs(:where).returns posts_stub
+      coach.stubs(:prev_intent_to).with(user)\
+            .returns Post::Intents[:coach][:showed_epics]
 
       epic = Epic.create(name: 'Healthcare', user: user)
       incoming_post.text = '1'

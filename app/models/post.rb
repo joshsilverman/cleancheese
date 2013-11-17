@@ -27,4 +27,15 @@ class Post < ActiveRecord::Base
                 text: text, 
                 intent:intent
   end
+
+  def match_on_abbrev
+    return false unless sender
+
+    abbreviations = sender.epics.where('abbreviation IS NOT NULL').\
+                        pluck(:abbreviation)
+    abbreviations += ['do']
+
+    regex = /^(#{abbreviations.join("|")}) (.+)/i
+    text.match regex
+  end
 end

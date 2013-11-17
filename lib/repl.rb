@@ -1,3 +1,5 @@
+require "mocha/setup"
+
 def init
   Rails.env.stubs(:test?).returns true
   Rails.logger.level = 1

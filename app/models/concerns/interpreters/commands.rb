@@ -12,14 +12,19 @@ module Commands
 
   # @todo: move to TasksController
   def create_task user, incoming_post
-    new_task_name_match = incoming_post.text.match(/^do (.+)/i)
-    return false unless new_task_name_match
+    task_match = incoming_post.match_on_abbrev
+    return false unless task_match
 
-    task_name_with_complete_by_str = new_task_name_match[1]
+    task_name_with_complete_by_str = task_match[2]
     task_name, complete_by = 
       interpret_msg_with_complete_by_str(task_name_with_complete_by_str)
 
-    incoming_post.tasks.create(name: task_name, complete_by: complete_by)
+    new_task = Task.create(name: task_name, complete_by: complete_by)
+    incoming_post.tasks << new_task
+
+    abbreviation = task_match[1]
+    epic = Epic.where(user: user, abbreviation: abbreviation).first
+    new_task.update(epic: epic) if epic
 
     "I just added a new task: #{task_name}"
   end
@@ -54,10 +59,8 @@ module Commands
 
   # @todo: move to EpicController
   def show_epic_details user, incoming_post
-    last_coach_post = Post.where(sender: self, recipient: user)\
-                                .order(created_at: :desc).first
-    return false unless last_coach_post
-    return false unless last_coach_post.intent == Post::Intents[:coach][:showed_epics]
+    prev_intent_of_coach = self.prev_intent_to user
+    return false unless prev_intent_of_coach ==  Post::Intents[:coach][:showed_epics]
 
     epic_index = incoming_post.text.to_i - 1
     return false unless epic_index >= 0
@@ -73,27 +76,20 @@ module Commands
 
   # @todo: move to EpicController
   def hide_epic user, incoming_post
-    prev_intent_of_coach = self.prev_intent_to user
-    return false unless prev_intent_of_coach ==  Post::Intents[:coach][:showed_epic_details]
-
+    return false unless self.prev_intent_to(user) ==  Post::Intents[:coach][:showed_epic_details]
     return false unless incoming_post.text == '1'
-    
-    epic = selected_epic_for user
-    return false unless epic
+    return false unless epic = selected_epic_for(user)
 
     epic.update(hidden:true)
 
     "OK, I hid #{epic.name}"
   end
 
+  # @todo: move to EpicController
   def select_abbreviation_option user, incoming_post
-    prev_intent_of_coach = self.prev_intent_to user
-    return false unless prev_intent_of_coach ==  Post::Intents[:coach][:showed_epic_details]
-
+    return false unless self.prev_intent_to(user) ==  Post::Intents[:coach][:showed_epic_details]
     return false unless incoming_post.text == '2'
-
-    epic = selected_epic_for user
-    return false unless epic
+    return false unless epic = selected_epic_for(user)
 
     incoming_post.update epic: epic
 
@@ -102,13 +98,10 @@ module Commands
 
   # @todo: move to EpicController
   def abbreviate_epic user, incoming_post
-    prev_intent_of_coach = self.prev_intent_to user
-    return false unless prev_intent_of_coach ==  Post::Intents[:coach][:solicit_abbreviation]
-
-    epic = selected_epic_for user
-    return false unless epic
-
+    return false unless self.prev_intent_to(user) ==  Post::Intents[:coach][:solicit_abbreviation]
+    return false unless epic = selected_epic_for(user)
     return false if user.epics.where(abbreviation: incoming_post.text).exists?
+
     epic.update(abbreviation: incoming_post.text)
 
     "Ok, you can now refer to '#{epic.name}' as '#{epic.abbreviation}'"

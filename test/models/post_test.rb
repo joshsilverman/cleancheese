@@ -61,4 +61,37 @@ describe 'PostTest' do
       post.text.must_equal text
     end
   end
+
+  describe '#match_on_abbrev' do
+    let(:user) { create(:user) }
+    let(:post) { build(:post, text: 'HC do it') }
+
+    it 'returns false if no sender' do
+      post.match_on_abbrev.must_equal false
+    end
+
+    it 'returns a match object if there is an abbreviation match' do
+      post.sender = user
+      epic = build(:epic, user: user, abbreviation: 'HC')
+      user.epics << epic
+
+      post.match_on_abbrev.must_be_kind_of MatchData
+    end
+
+    it 'returns a match object with HC at first subscript' do
+      post.sender = user
+      epic = build(:epic, user: user, abbreviation: 'HC')
+      user.epics << epic
+
+      post.match_on_abbrev[1].must_equal 'HC'
+    end
+
+    it 'returns a match object with HC at first subscript' do
+      post.sender = user
+      epic = build(:epic, user: user, abbreviation: 'HC')
+      user.epics << epic
+
+      post.match_on_abbrev[2].must_equal 'do it'
+    end
+  end
 end
