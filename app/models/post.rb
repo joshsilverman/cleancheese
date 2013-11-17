@@ -7,6 +7,9 @@ class Post < ActiveRecord::Base
   # intents
   Intents = {
       coach: {
+        sending_todays_goal: 8,
+        reminding_todays_goal: 9,
+        
         completed_todays_goal: 0,
         created_task: 1,
 

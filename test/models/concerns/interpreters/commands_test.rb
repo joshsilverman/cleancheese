@@ -124,16 +124,6 @@ describe Commands do
 
       Task.last.epic.must_equal epic
     end
-
-    # it 'wont associate new task with epic if abbreviation is do' do
-    #   epic = Epic.create(user: user, abbreviation: 'do')
-    #   incoming_message.text = 'do create account'
-
-    #   coach.create_task(user, incoming_message)
-
-    #   # binding.pry
-    #   Task.last.epic.must_equal nil
-    # end
   end
 
   describe '#create_epic' do

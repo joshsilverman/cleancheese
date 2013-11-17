@@ -2,6 +2,52 @@ require 'test_helper'
 
 describe 'Coach' do
   
+  describe '#send_todays_goal' do
+    let(:user) { build :user }
+    let(:coach) { build :coach }
+    let(:todays_goal) { build :task }
+
+    it 'returns a post' do
+      coach.expects(:todays_goal).returns(todays_goal)
+
+      response = coach.send_todays_goal user
+      response.must_be_kind_of Post
+    end
+
+    it 'creates a post with correct intent' do
+      expected_intent = Post::Intents[:coach][:sending_todays_goal]
+      coach.stubs(:todays_goal).returns(todays_goal)
+
+      response = coach.send_todays_goal user
+
+      refute_nil(expected_intent)
+      response.must_be_kind_of Post
+    end
+  end
+
+  describe '#send_reminder' do
+    let(:user) { build :user }
+    let(:coach) { build :coach }
+    let(:todays_goal) { build :task }
+
+    it 'returns a post' do
+      coach.expects(:todays_goal).returns(todays_goal)
+
+      response = coach.send_reminder user
+      response.must_be_kind_of Post
+    end
+
+    it 'creates a post with correct intent' do
+      expected_intent = Post::Intents[:coach][:reminding_todays_goal]
+      coach.stubs(:todays_goal).returns(todays_goal)
+
+      response = coach.send_reminder user
+
+      refute_nil(expected_intent)
+      response.must_be_kind_of Post
+    end
+  end
+
   describe '#respond' do
     let(:coach) {build(:coach)}
     let(:user) {build(:user)}

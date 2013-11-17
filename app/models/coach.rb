@@ -5,13 +5,15 @@ class Coach < User
   def send_todays_goal user
     top_ranked_task = todays_goal
     msg = "Today's goal: #{top_ranked_task.name}"
-    sms(user, msg)
+    intent = Post::Intents[:coach][:sending_todays_goal]
+    sms(user, msg, intent)
   end
 
   def send_reminder user
     top_ranked_task = todays_goal
     msg = "Don't forget your goal for today: #{top_ranked_task.name}"
-    sms(user, msg)
+    intent = Post::Intents[:coach][:reminding_todays_goal]
+    sms(user, msg, intent)
   end
 
   def respond user, incoming_post
