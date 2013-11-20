@@ -49,6 +49,66 @@ describe Commands do
     end
   end
 
+  describe '#show_tasks' do
+    let(:coach) {build(:coach)}
+    let(:user) {build(:user)}
+    let(:incoming_post) {build(:post)}
+
+    it 'returns false if cannot interpret' do
+      incoming_post.text = 'asdf'
+
+      response = coach.show_tasks user, incoming_post
+
+      response.must_equal false
+    end
+
+    it 'wont return false if givin "tasks"' do
+      incoming_post.text = 'tasks'
+      user.tasks.stubs(:visible).returns(user.tasks)
+
+      response = coach.show_tasks user, incoming_post
+      
+      response.wont_equal false
+    end
+
+    it 'returns list of tasks if givin "tasks"' do
+      incoming_post.text = 'tasks'
+      user.save
+      user.tasks << Task.create(name: 'task')
+
+      response = coach.show_tasks user, incoming_post
+      
+      response.must_include 'Tasks:'
+      response.must_include '(1) task'
+    end
+
+    it 'returns list of tasks excluding non-active tasks' do
+      incoming_post.text = 'tasks'
+
+      user.save
+      user.tasks << Task.create(name: 'task')
+      task2 = Task.create(name: 'task2', complete: true)
+      user.tasks << task2
+      task2.update(updated_at: 10.days.ago)
+
+      response = coach.show_tasks user, incoming_post
+      
+      response.wont_include 'task2'
+    end
+
+    it 'returns list of tasks with actions if can interpret' do
+      incoming_post.text = 'tasks'
+      
+      user.save
+      user.tasks << Task.create(name: 'task')
+
+      response = coach.show_tasks user, incoming_post
+      
+      expected_actions = "Reply '1','2' ... for options"
+      response.must_include expected_actions
+    end
+  end
+
   describe '#create_task' do
     let(:coach) {build(:coach)}
     let(:user) {create(:user)}

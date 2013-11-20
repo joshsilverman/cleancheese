@@ -1,6 +1,18 @@
 require 'test_helper'
 
 describe 'User' do
+
+  describe '#tasks' do
+    it 'must save tasks' do
+      task = Task.create
+      user = User.create
+
+      user.tasks << task
+
+      user.tasks.first.must_equal task
+    end
+  end
+
   describe '#prev_post_to' do
     let(:coach) { build :coach }
     let(:user) { build :user }

@@ -43,6 +43,8 @@ class Coach < User
       intent = Post::Intents[:coach][:solicit_abbreviation]
     elsif response = abbreviate_epic(user, incoming_post)
       intent = Post::Intents[:coach][:abbreviated_epic]
+    elsif response = show_tasks(user, incoming_post)
+      intent = Post::Intents[:coach][:showing_tasks]
     else
       intent = nil
       response = nil

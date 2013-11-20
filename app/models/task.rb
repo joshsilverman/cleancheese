@@ -2,6 +2,7 @@ class Task < ActiveRecord::Base
 
   belongs_to :post
   belongs_to :epic
+  belongs_to :user
 
   include RankedModel
   ranks :rank, scope: :active

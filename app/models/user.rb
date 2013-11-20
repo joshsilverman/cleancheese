@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
 
   has_many :epics
+  has_many :tasks
 
   def prev_post_to user, i = 0
     Post.where(sender: self, recipient: user)\

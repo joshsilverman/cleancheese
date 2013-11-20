@@ -11,6 +11,7 @@ class Post < ActiveRecord::Base
         reminding_todays_goal: 9,
         
         completed_todays_goal: 0,
+        showing_tasks: 10,
         created_task: 1,
 
         created_epic: 2,

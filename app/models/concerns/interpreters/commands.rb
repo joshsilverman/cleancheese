@@ -10,6 +10,21 @@ module Commands
     end
   end
 
+  def show_tasks user, incoming_post
+    text = incoming_post.text
+    match = text.match(/^tasks$/i)
+    return false unless match
+
+    response = "Tasks:\n"
+    
+    user.tasks.active.each_with_index do |task, i|
+      response += " (#{i+1}) #{task.name}\n"
+    end
+    response += "\n\nReply '1','2' ... for options"
+
+    response
+  end
+
   # @todo: move to TasksController
   def create_task user, incoming_post
     task_match = incoming_post.match_on_abbrev

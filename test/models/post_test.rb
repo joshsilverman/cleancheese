@@ -60,6 +60,13 @@ describe 'PostTest' do
 
       post.text.must_equal text
     end
+
+    it 'wont error with long text' do
+      text = "abc" * 1000
+      post = Post.save_sms sender, recipient, text, intent
+
+      post.text.must_equal text
+    end
   end
 
   describe '#match_on_abbrev' do

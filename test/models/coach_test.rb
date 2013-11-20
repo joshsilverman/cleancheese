@@ -154,6 +154,13 @@ describe 'Coach' do
 
       intent.must_equal 7
     end
+
+    it 'returns intent of 10 when #show_tasks truthy' do
+      coach.expects(:show_tasks).with(user, post).returns("msg")
+      response, intent = coach.interpret(user, post)
+
+      intent.must_equal 10
+    end
   end
 
   describe '#interpret_msg_with_complete_by_str' do
