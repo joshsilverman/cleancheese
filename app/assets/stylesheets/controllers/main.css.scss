@@ -1,36 +1,59 @@
+body {
+  font-size: 100%;
+  // background: #48b379;
+  // background: image-url('retina_wood.png');
+  background: image-url('darkwood.png');
+  font-family: 'Noto Sans', sans-serif
+}
+
+.topfold {
+  color:#ddd;
+
+  .tagline {
+    margin:125px 10px 10px 50px;
+    width: 50%;
+    position:absolute;
+
+    h1 {
+      font-size: 3em;
+      line-height: 1.6em;
+    }
+    h3 {
+      font-size: 1em;
+      line-height: 1.6em;
+    }
+  }
+}
+
 .splash-container {
-  height: 2000px;
+  height: 1000px;
 
   .section {
     position: absolute;
-    height:400px;
   }
 
   .section:nth-child(1) {
+    .iphone {
+      position:absolute;
+      left:60%;
+      top:75px;
+      // margin-top:00px;
+      width:30%;
+    }
+
+    height:400px;
+    overflow: hidden;
+    width:100%;
+  }
+
+  .section:nth-child(2) {
+    box-shadow: 0px -5px 20px #111;
+    top:400px;
+    // background: image-url('darkwood.png');
+    background: #48b379;
+
+    li {
+      // position:absolute;
+    }
   }
 }
-
-.bubble {
-  position: relative;
-  width: 250px;
-  height: 120px;
-  padding: 0px;
-  background: blue;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-}
-
-.bubble:after {
-  content: '';
-  position: absolute;
-  border-style: solid;
-  border-width: 15px 0 15px 15px;
-  border-color: transparent blue;
-  display: block;
-  width: 0;
-  z-index: 1;
-  right: -15px;
-  top: 45px;
-}
-
