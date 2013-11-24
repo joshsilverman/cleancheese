@@ -10,7 +10,7 @@ body {
   color:#ddd;
 
   .tagline {
-    margin:125px 10px 10px 50px;
+    margin:145px 10px 10px 70px;
     width: 50%;
     position:absolute;
 
@@ -21,6 +21,46 @@ body {
     h3 {
       font-size: 1em;
       line-height: 1.6em;
+    }
+  }
+
+  &.stuck {
+    position: fixed !important;
+  }
+}
+
+.topfold-header {
+  height: 60px;
+  position:fixed;
+  width:100%;
+  z-index: 2;
+
+  background: image-url('darkwood.png');
+  transition: box-shadow .2s ease;
+
+  display: none;
+
+  .tagline {
+    margin-top: -12px;
+    padding:0;
+
+    h1 {
+      transition: margin-top .2s ease;
+      line-height: 1.6em;
+      margin-top: -35px;
+    }
+  }
+
+  &.enabled {
+    display: block;
+  }
+
+  &.small {
+    box-shadow: 0px 5px 20px #327c54;
+
+    h1 {
+      font-size: 1.6em;
+      margin-top: 20px;
     }
   }
 }
@@ -35,9 +75,9 @@ body {
   .section:nth-child(1) {
     .iphone {
       position:absolute;
-      left:60%;
+      left:75%;
+      margin-left: -15%;
       top:75px;
-      // margin-top:00px;
       width:30%;
     }
 
@@ -46,14 +86,10 @@ body {
     width:100%;
   }
 
-  .section:nth-child(2) {
-    box-shadow: 0px -5px 20px #111;
+  .timeline-container {
+    box-shadow: 0px -3px 18px #111;
     top:400px;
-    // background: image-url('darkwood.png');
     background: #48b379;
 
-    li {
-      // position:absolute;
-    }
   }
 }

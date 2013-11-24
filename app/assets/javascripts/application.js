@@ -14,8 +14,7 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require jquery.ui.sortable
-//= require vendor/jquery.ui.punch
-//= require vendor/jquery.stellar
+//= require_tree ./vendor
 
 //= require underscore
 //= require backbone
@@ -26,3 +25,5 @@
 //= require_tree ./views
 //= require_tree ./routers
 //= require rails-timeago
+
+//= require main
