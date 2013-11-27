@@ -28,13 +28,14 @@ h2
 
 .timeline
   list-style: none
-  margin: 0 5% 0 50%
-  padding: 120px 0
+  margin: 0 5% 0 20%
+  padding: 100px 0
   border-left: 8px solid $white
   li
     margin: 25px 0
     position: relative
     left: -4px
+
   p
     margin: 0 0 15px
 
@@ -47,6 +48,14 @@ h2
   background: $bg
   border: 5px solid $white
   border-radius: 50%
+  display: block
+  position: absolute
+
+.timeago
+  width: 100px
+  margin-top: -10px
+  top: 50%
+  left: -140px
   display: block
   position: absolute
 
@@ -110,29 +119,3 @@ label
     p
       max-height: 200px
       color: $white
-
-li.left
-  .content, label
-    left: -100%
-    margin-left: 0px
-    margin-right: $inner_gutter
-
-  .content
-    &:before, &:after
-      content: ""
-      width: 0
-      height: 0
-      border: solid transparent
-      position: absolute
-      pointer-events: none
-      left: 100%
-    &:before
-      border-left-color: inherit
-      border-width: 20px
-      top: 50%
-      margin-top: -20px
-    &:after
-      border-left-color: $bg
-      border-width: 17px
-      top: 50%
-      margin-top: -17px

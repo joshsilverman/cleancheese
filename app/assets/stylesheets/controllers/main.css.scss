@@ -9,23 +9,19 @@ body {
 .topfold {
   color:#ddd;
 
-  .tagline {
-    margin:145px 10px 10px 70px;
-    width: 50%;
-    position:absolute;
+  .asker-photo {
+    // height: 100px;
+    position:relative;
+    left: 20%;
 
-    h1 {
-      font-size: 3em;
-      line-height: 1.6em;
+    img {
+      border-radius:108px;
+      border:8px solid #eee9dc;
+      margin-left:-106px;
+      margin-top: 25px;
+      position:relative;
+      z-index: 10;
     }
-    h3 {
-      font-size: 1em;
-      line-height: 1.6em;
-    }
-  }
-
-  &.stuck {
-    position: fixed !important;
   }
 }
 
@@ -39,57 +35,30 @@ body {
   transition: box-shadow .2s ease;
 
   display: none;
-
-  .tagline {
-    margin-top: -12px;
-    padding:0;
-
-    h1 {
-      transition: margin-top .2s ease;
-      line-height: 1.6em;
-      margin-top: -35px;
-    }
-  }
-
-  &.enabled {
-    display: block;
-  }
-
-  &.small {
-    box-shadow: 0px 5px 20px #327c54;
-
-    h1 {
-      font-size: 1.6em;
-      margin-top: 20px;
-    }
-  }
 }
 
 .splash-container {
-  height: 1000px;
+  // height: 1000px;
 
   .section {
     position: absolute;
   }
 
   .section:nth-child(1) {
-    .iphone {
-      position:absolute;
-      left:75%;
-      margin-left: -15%;
-      top:75px;
-      width:30%;
-    }
-
-    height:400px;
+    // height:200px;
     overflow: hidden;
     width:100%;
   }
 
   .timeline-container {
     box-shadow: 0px -3px 18px #111;
-    top:400px;
+    top:200px;
     background: #48b379;
 
+    h1 {
+      margin-left: 24.3%;
+      margin-top: 50px;
+      position:absolute;
+    }
   }
 }
