@@ -1,69 +1,115 @@
-<div class="topfold topfold-header">
-  <div class="tagline">
-    <h1>Ipsum Lorem Fi Natus</h1>
+<div class='header'>
+  <div class='drawer-toggle'><%= image_tag 'mobile-nav.png' %></div>
+  <div class='sign-in'><%= link_to "Sign in with Twitter", '/' %></div>
+  <div class='logo'>Wisr</div>
+</div>
+
+<div class="section topfold">
+  <div class="asker-photo">
+    <%= image_tag 'katniss.png' %>
+  </div>
+
+  <div class="title">
+    <h1>Biology</h1>
   </div>
 </div>
 
-<div class="splash-container">
-  <div class="section topfold">
-    <div class="asker-photo"><%= image_tag 'gravatar.jpg' %></div>
-    <div class='temp' data-stellar-ratio="-0.1"></div>
-  </div>
-  <div class="section timeline-container" data-stellar-ratio="1">
-    <h1>@Consectetur</h1>
-    <ul class='timeline'>
-      <li class='work left'>
-        <input class='radio' id='work4' name='works' type='radio'>
-        <div class="relative">
-          <label for='work4'>Dolor sit amet</label>
-          <span class='timeago'>3 minutes ago</span>
-          <span class='circle'></span>
-        </div>
-        <div class='content'>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio ea necessitatibus quo velit natus cupiditate 
-          </p>
-        </div>
-      </li>
-      <li class='work'>
-        <input class='radio' id='work5' name='works' type='radio' checked>
-        <div class="relative">
-          <label for='work5'>Lorem ipsum</label>
-          <span class='timeago'>9 hours ago</span>
-          <span class='circle'></span>
-        </div>
-        <div class='content'>
-          <p>
-            Molestiae officiis voluptate excepturi rem veritatis eum aliquam qui laborum non ipsam ullam tempore reprehenderit illum eligendi cumque mollitia temporibus! Natus dicta qui est optio rerum.
-          </p>
-        </div>
-      </li>
-      <li class='work left'>
-        <input class='radio' id='work4' name='works' type='radio'>
-        <div class="relative">
-          <label for='work4'>Dolor sit amet</label>
-          <span class='timeago'>12 hours ago</span>
-          <span class='circle'></span>
-        </div>
-        <div class='content'>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio ea necessitatibus quo velit natus cupiditate
-          </p>
-        </div>
-      </li>
-      <li class='work'>
-        <input class='radio' id='work5' name='works' type='radio' checked>
-        <div class="relative">
-          <label for='work5'>Lorem ipsum</label>
-          <span class='timeago'>18 hours ago</span>
-          <span class='circle'></span>
-        </div>
-        <div class='content'>
-          <p>
-            Molestiae officiis voluptate excepturi rem veritatis eum aliquam qui laborum non ipsam ullam tempore reprehenderit illum eligendi cumque mollitia temporibus! Natus dicta qui est optio rerum.
-          </p>
-        </div>
-      </li>
-    </ul>
-  </div>
+<ul class='activity-stream'>
+  <li>
+    <div class='content'>
+      <h3>Dolor sit amet</h3>
+      <p>
+        Ipsum dolor sit amet, consectetur adipisicing elit. Odio ea necessitatibus quo velit natus cupiditate 
+      </p>
+      <p>
+        Consectetur adipisicing elit. Odio ea necessitatibus quo velit natus cupiditate 
+      </p>
+      <p>
+        Velit natus cupiditate 
+      </p>
+      <p>
+        Wit amet, consectetur adipisicing elit. Odio ea necessitatibus quo velit natus cupiditate 
+      </p>
+      <p>
+        Dolor sit amet, consectetur adipisicing elit. Odio ea necessitatibus quo velit natus cupiditate 
+      </p>
+      <p>
+        Velit natus cupiditate 
+      </p>
+      <p>
+        Wit amet, consectetur adipisicing elit. Odio ea necessitatibus quo velit natus cupiditate 
+      </p>
+    </div>
+  </li>
+</ul>
+
+<div class="timeline-container">
+  <ul class='timeline'>
+    <li class=' left'>
+      <input class='radio' type='radio'>
+      <div class="relative">
+        <span class='timeago'>3 minutes ago</span>
+        <span class='circle'></span>
+      </div>
+      <div class='content'>
+        <h3>
+          A tumor whose cells are not spreading and that is not harming its environment significantly can be classified as a:
+        </h3>
+
+        <div class='answer'>Depends on what the tumor is</div><div></div>
+        <div class='answer'>Malignant neoplasia</div><div></div>
+        <div class='answer'>All tumors are harmful.</div><div></div>
+        <div class='answer'>Benign neoplasia.</div><div></div>
+      </div>
+    </li>
+    <li>
+      <input class='radio' type='radio' checked>
+      <div class="relative">
+        <span class='timeago'>9 hours ago</span>
+        <span class='circle'></span>
+      </div>
+      <div class='content'>
+        <h3>
+          There are two B cells, X and Y. How does an antibody on X compare with another antibody on X, and how does an antibody on X compare with an antibody on Y?
+        </h3>
+
+        <div class='answer'>Depends on what the tumor is</div><div></div>
+        <div class='answer'>Malignant neoplasia</div><div></div>
+        <div class='answer'>All tumors are harmful.</div><div></div>
+        <div class='answer'>Benign neoplasia.</div><div></div>
+      </div>
+    </li>
+    <li class='left'>
+      <input class='radio' type='radio'>
+      <div class="relative">
+        <span class='timeago'>12 hours ago</span>
+        <span class='circle'></span>
+      </div>
+      <div class='content'>
+        <h3>
+          _____ enzymes are derived from prokaryotes and are used to cleave DNA in specific sites.
+        </h3>
+
+        <div class='answer'>Depends on what the tumor is</div><div></div>
+        <div class='answer'>Malignant neoplasia</div><div></div>
+        <div class='answer'>All tumors are harmful.</div><div></div>
+        <div class='answer'>Benign neoplasia.</div><div></div>
+      </div>
+    </li>
+    <li>
+      <input class='radio' type='radio' checked>
+      <div class="relative">
+        <span class='timeago'>18 hours ago</span>
+        <span class='circle'></span>
+      </div>
+      <div class='content'>
+        <h3>Which acts as the template for the tRNA molecule?</h3>
+
+        <div class='answer'>Depends on what the tumor is</div><div></div>
+        <div class='answer'>Malignant neoplasia</div><div></div>
+        <div class='answer'>All tumors are harmful.</div><div></div>
+        <div class='answer'>Benign neoplasia.</div><div></div>
+      </div>
+    </li>
+  </ul>
 </div>

@@ -1,64 +1,108 @@
+//colors
+$white: #eee9dc;
+$dimwhite: #ccc;
+@font-face {
+  font-family: logoFont;
+  src: url(/assets/logo/logo-font.woff);
+}
+
 body {
   font-size: 100%;
   // background: #48b379;
   // background: image-url('retina_wood.png');
-  background: image-url('darkwood.png');
+  // background: image-url('darkwood.png');
+  background: #33914a image-url('treeline.png') repeat-x;
   font-family: 'Noto Sans', sans-serif
+}
+
+.header {
+  text-align: center;
+  background: rgba(0, 0, 0, 0.1);
+  height:40px;
+
+  .drawer-toggle {
+    padding: 10px;
+    display: inline-block;
+    float: left;
+
+    img {
+      height: 20px;
+    }
+  }
+
+  .logo {
+    display: inline-block;
+    color: $dimwhite;
+    font-family: logoFont;
+    font-size: 160%;
+    font-weight: 100;
+    padding: 15px;
+  }
+
+  .sign-in {
+    display: inline-block;
+    float: right;
+    padding: 10px;
+    font-size: 90%;
+
+    a {
+      color: $dimwhite;
+    }
+  }
 }
 
 .topfold {
   color:#ddd;
+  width:100%;
 
   .asker-photo {
-    // height: 100px;
     position:relative;
-    left: 20%;
+    margin-left: 12%;
 
     img {
       border-radius:108px;
       border:8px solid #eee9dc;
-      margin-left:-106px;
-      margin-top: 25px;
+      margin-top: -15px;
       position:relative;
       z-index: 10;
+      width:200px;
+      margin-left: -80px;
     }
   }
 }
 
-.topfold-header {
-  height: 60px;
-  position:fixed;
-  width:100%;
-  z-index: 2;
+.topfold {
+  color: $white;
+  font-weight: 100;
 
-  background: image-url('darkwood.png');
-  transition: box-shadow .2s ease;
-
-  display: none;
-}
-
-.splash-container {
-  // height: 1000px;
-
-  .section {
-    position: absolute;
-  }
-
-  .section:nth-child(1) {
-    // height:200px;
-    overflow: hidden;
-    width:100%;
-  }
-
-  .timeline-container {
-    box-shadow: 0px -3px 18px #111;
-    top:200px;
-    background: #48b379;
+  .title {
+    margin-left:12%;
+    margin-right:40%;
+    padding-left:165px;
+    position: relative;
+    top: -90px;
 
     h1 {
-      margin-left: 24.3%;
-      margin-top: 50px;
-      position:absolute;
+      font-weight: normal;
     }
+  }
+}
+
+.section {
+  position: absolute;
+}
+
+.section:nth-child(1) {
+  overflow: hidden;
+  width:100%;
+}
+
+.timeline-container {
+  // top:150px;
+
+  h1 {
+    margin-left: 24.3%;
+    margin-top: 50px;
+    position:absolute;
   }
 }
