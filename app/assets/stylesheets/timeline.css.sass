@@ -9,6 +9,13 @@ $dimwhite: #ddd
 $red: #f98262
 $inner_gutter: 50px
 
+$max_left_gutter: 12%
+$max979_left_gutter: 16%
+$max767_left_gutter: 0%
+
+$border_thick: 8px
+$border_thin: 0px
+
 h2
   margin: 3em 0 0 0
   font-size: 1.5em
@@ -22,13 +29,25 @@ h2
 .timeline-container
   position: absolute
   top: 216px
-  margin: 0 34% 0 12%
+  margin: 0 34% 0 $max_left_gutter
+
+  @media (max-width: 979px)
+    margin: 0 -4% 0 $max979_left_gutter
+
+  @media (max-width: 767px)
+    margin: 0 2% 0 $max767_left_gutter
+    top: 180px
+
   font-size: 100%
   color: $white
 
   .timeline
     list-style: none
-    border-left: 8px solid $white
+    border-left: $border_thick solid $white
+
+    @media (max-width: 767px)
+      border-left: $border_thin solid $white
+
     li
       margin: 25px 0
       position: relative
@@ -38,7 +57,7 @@ h2
 
         .answer
           background: rgba(0, 0, 0, 0.1)
-          padding: 8px
+          padding: $border_thick
           margin: 10px
           border-radius: 0.5em
           font-weight: 100
@@ -53,6 +72,9 @@ h2
   margin: 0 2% 0 62%
   position: relative
   top: 200px
+
+  @media (max-width: 979px)
+    display: none
 
   li
     margin: 0
@@ -86,6 +108,9 @@ h2
   display: block
   position: absolute
 
+  @media (max-width: 767px)
+    display: none
+
 .timeago
   width: 20%
   margin-top: -10px
@@ -94,6 +119,9 @@ h2
   display: block
   position: absolute
   text-align: right
+
+  @media (max-width: 767px)
+    display: none
 
 .content
   padding: 0 20px 15px
@@ -106,6 +134,10 @@ h2
   margin-right: 8%
   margin-left: 8%
 
+  @media (max-width: 767px)
+    margin-right: 0%
+    margin-left: 0%
+
   h3
     padding: 18px 0 12px
     color: $white
@@ -113,26 +145,27 @@ h2
 
 .radio
   display: none
-  & + .relative
-    .circle
-      background: $red
-  & ~ .content
 
-    &:before, &:after
-      content: ""
-      width: 0
-      height: 0
-      border: solid transparent
-      position: absolute
-      pointer-events: none
-      right: 100%
-    &:before
-      border-right-color: inherit
-      border-width: 20px
-      top: 50%
-      margin-top: -20px
-    &:after
-      border-right-color: $bg
-      border-width: 17px
-      top: 50%
-      margin-top: -17px
+  @media (min-width: 768px)
+    & + .relative
+      .circle
+        background: $red
+    & ~ .content
+      &:before, &:after
+        content: ""
+        width: 0
+        height: 0
+        border: solid transparent
+        position: absolute
+        pointer-events: none
+        right: 100%
+      &:before
+        border-right-color: inherit
+        border-width: 20px
+        top: 50%
+        margin-top: -20px
+      &:after
+        border-right-color: $bg
+        border-width: 17px
+        top: 50%
+        margin-top: -17px
