@@ -5,7 +5,9 @@
 // Colours
 $bg: #339152
 $white: #eee9dc
-$dimwhite: #ddd
+$black: #333333
+
+$dimwhite: #D5D1C5
 $red: #f98262
 $inner_gutter: 50px
 
@@ -56,7 +58,7 @@ h2
       .content
 
         .answer
-          background: rgba(0, 0, 0, 0.1)
+          background: $dimwhite
           padding: $border_thick
           margin: 10px
           border-radius: 0.5em
@@ -81,15 +83,15 @@ h2
     left: -4px
 
     .content
-      background: rgba(0, 0, 0, 0.1)
+      background: $dimwhite
       border-color: transparent
 
       h3
-        color: $white
+        color: $black
 
       p
         max-height: 200px
-        color: $white
+        color: $black
         overflow: hidden
         margin: 0 0 15px
         font-size: 90%
@@ -124,6 +126,9 @@ h2
     display: none
 
 .content
+  background: $white
+  color: $black
+
   padding: 0 20px 15px
   border-width: 2px
   border-style: solid
@@ -140,7 +145,7 @@ h2
 
   h3
     padding: 18px 0 12px
-    color: $white
+    color: #222
     font-weight: 100
 
 .radio
@@ -165,7 +170,7 @@ h2
         top: 50%
         margin-top: -20px
       &:after
-        border-right-color: $bg
+        border-right-color: $white
         border-width: 17px
         top: 50%
         margin-top: -17px
